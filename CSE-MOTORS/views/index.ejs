@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/_head') %>
+</head>
+<body>
+    <%- include('partials/_header') %>
+    <%- include('partials/_nav') %>
+    
+    <main>
+        <section class="hero">
+            <img src="/images/hero.jpg" alt="CSE Motors Showroom">
+            <div class="hero-text">
+                <h2>Welcome to CSE Motors</h2>
+                <p>Your trusted partner for quality vehicles</p>
+                <a href="/vehicles" class="cta-button">View Inventory</a>
+            </div>
+        </section>
+
+        <section class="featured-vehicles">
+            <h2>Featured Vehicles</h2>
+            <div class="vehicle-grid">
+                <div class="vehicle-card">
+                    <img src="/images/vehicle1.jpg" alt="Featured Vehicle 1">
+                    <h3>2023 Model X</h3>
+                    <p>Starting at $29,999</p>
+                </div>
+                <div class="vehicle-card">
+                    <img src="/images/vehicle2.jpg" alt="Featured Vehicle 2">
+                    <h3>2023 Model Y</h3>
+                    <p>Starting at $34,999</p>
+                </div>
+                <div class="vehicle-card">
+                    <img src="/images/vehicle3.jpg" alt="Featured Vehicle 3">
+                    <h3>2023 Model Z</h3>
+                    <p>Starting at $39,999</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="testimonials">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonial-grid">
+                <blockquote>
+                    <p>"Great service and amazing selection!"</p>
+                    <cite>- John D.</cite>
+                </blockquote>
+                <blockquote>
+                    <p>"The best car buying experience ever."</p>
+                    <cite>- Sarah M.</cite>
+                </blockquote>
+            </div>
+        </section>
+    </main>
+
+    <%- include('partials/_footer') %>
+</body>
+</html>

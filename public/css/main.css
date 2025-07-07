@@ -1,0 +1,226 @@
+/* Base Styles (Mobile First) */
+:root {
+    --primary-color: #003366;
+    --secondary-color: #c91e2c; /* corrigido para contraste melhor */
+    --accent-color: #d6e2dc;    /* fundo mais escuro para blockquote */
+    --text-color: #222;         /* mais escuro para melhor leitura */
+    --light-text: #fff;         /* branco puro */
+    --font-main: 'Roboto', sans-serif;
+    --font-heading: 'Lato', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    padding: 1rem;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.logo-container img {
+    height: 50px;
+}
+
+nav {
+    background-color: var(--primary-color);
+    padding: 1rem;
+}
+
+.nav-links {
+    display: none;
+    list-style: none;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+.nav-links a {
+    color: var(--light-text);
+    text-decoration: none;
+    padding: 0.5rem;
+    display: block;
+}
+
+.nav-links a.active {
+    background-color: var(--secondary-color);
+    border-radius: 4px;
+}
+
+.hamburger {
+    background: none;
+    border: none;
+    color: var(--light-text);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.hero {
+    position: relative;
+    height: 50vh;
+    overflow: hidden;
+}
+
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hero-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.6); /* fundo escuro transparente para contraste */
+    color: var(--light-text);
+    padding: 1rem;
+    text-align: center;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: var(--light-text); /* já está puro branco (#fff) */
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+.featured-vehicles,
+.testimonials {
+    padding: 2rem 1rem;
+}
+
+.featured-vehicles h2,
+.testimonials h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-heading);
+}
+
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.vehicle-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-5px);
+}
+
+.vehicle-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.vehicle-card h3,
+.vehicle-card p {
+    padding: 0.5rem 1rem;
+    text-align: center;
+}
+
+.testimonial-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+blockquote {
+    background-color: var(--accent-color);
+    color: #222; /* contraste aprimorado */
+    padding: 1.5rem;
+    border-radius: 8px;
+    position: relative;
+}
+
+blockquote p {
+    margin-bottom: 0.5rem;
+    font-style: italic;
+}
+
+blockquote cite {
+    font-weight: bold;
+}
+
+footer {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
+
+/* Media Queries for Larger Screens */
+@media screen and (min-width: 768px) {
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    .nav-links {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .hero-text {
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.6); /* manter o fundo escuro em telas grandes */
+        text-align: left;
+        padding: 2rem;
+    }
+
+    .vehicle-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .testimonial-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .hero {
+        height: 70vh;
+    }
+
+    .hero-text h2 {
+        font-size: 2.5rem;
+    }
+}
