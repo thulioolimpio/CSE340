@@ -1,0 +1,18 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "previewLimit": 50,
+            "server": "postgresql://assignment2_c21r_user:o8bKtdyWv5dcMGpQWnEqpYL5gAKQ8e7U@dpg-d1racnur433s73eeuh80-a.oregon-postgres.render.com/assignment2_c21r",
+            "driver": "PostgreSQL",
+            "name": "RenderDB",
+            "connectString": "postgresql://assignment2_c21r_user:o8bKtdyWv5dcMGpQWnEqpYL5gAKQ8e7U@dpg-d1racnur433s73eeuh80-a.oregon-postgres.render.com/assignment2_c21r",
+            "database": "assignment2_c21r",
+            "username": "assignment2_c21r_user"
+        }
+    ]
+}
