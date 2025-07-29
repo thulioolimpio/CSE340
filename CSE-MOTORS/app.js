@@ -9,28 +9,31 @@ app.set('views', path.join(__dirname, 'views'));
 // MIDDLEWARE PARA ARQUIVOS ESTÁTICOS (css, js, imagens)
 app.use(express.static(path.join(__dirname, 'public')));
 
+// MIDDLEWARE PARA RECEBER JSON E FORMULÁRIOS (se necessário futuramente)
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 // ROTAS
 const indexRouter = require('./routes/index');
-const inventoryRouter = require('./routes/inventoryRoute'); // se você tiver
-app.use('/', indexRouter);
-app.use('/inv', inventoryRouter); // exemplo: rota para /inv/detail/:id
+const inventoryRouter = require('./routes/inventoryRoute');
 
-// MIDDLEWARE DE ERRO 404 (deve vir após todas as rotas)
-app.use((req, res) => {
+app.use('/', indexRouter);
+app.use('/inv', inventoryRouter);
+
+// 404 NOT FOUND HANDLER
+app.use((req, res, next) => {
   res.status(404).render('errors/error', {
-    title: '404 - Not Found',
-    message: 'Sorry, the page you requested could not be found.',
-    nav: '' // se quiser pode incluir getNav()
+    title: 'Página não encontrada',
+    message: 'Desculpe, a página que você está procurando não foi encontrada.'
   });
 });
 
-// MIDDLEWARE DE ERRO 500 (deve vir depois do 404)
+// 500 ERROR HANDLER (erro do servidor)
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).render('errors/error', {
-    title: '500 - Server Error',
-    message: 'Something went wrong on the server.',
-    nav: ''
+    title: 'Erro Interno do Servidor',
+    message: 'Ocorreu um erro inesperado. Tente novamente mais tarde.'
   });
 });
 

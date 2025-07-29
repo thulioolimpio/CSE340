@@ -1,23 +1,26 @@
-// controllers/invController.js
-const invModel = require("../models/inventoryModel");
-const utilities = require("../utilities");
-const detailUtil = require("../utilities/invDetailTemplate");
+const invModel = require('../models/inventoryModel');
+const utilities = require('../utilities');
 
-async function buildById(req, res, next) {
+async function buildDetailView(req, res, next) {
   try {
-    const inv_id = req.params.inv_id;
-    const vehicle = await invModel.getVehicleById(inv_id);
-    const nav = await utilities.getNav(); // você pode manter o nav fixo se preferir
-    const html = detailUtil.buildDetailView(vehicle);
+    const invId = parseInt(req.params.inv_id);
+    const data = await invModel.getVehicleById(invId);
+
+    if (!data) {
+      return next(new Error("Veículo não encontrado."));
+    }
+
+    const pageHtml = utilities.buildDetailHTML(data);
 
     res.render("inventory/detail", {
-      title: `${vehicle.inv_make} ${vehicle.inv_model}`,
-      nav,
-      content: html
+      title: `${data.inv_make} ${data.inv_model}`,
+      pageHtml
     });
-  } catch (err) {
-    next(err);
+  } catch (error) {
+    next(error);
   }
 }
 
-module.exports = { buildById };
+module.exports = {
+  buildDetailView,
+};

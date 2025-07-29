@@ -1,40 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <%- include('../partials/head') %>
-  <title><%= title %></title>
-</head>
-<body>
-  <%- include('../partials/header') %>
-  <%- include('../partials/nav') %>
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/nav') %>
 
-  <main>
-    <%- content %>
-  </main>
+<main class="container">
+  <h1><%= title %></h1>
+  <div class="detail-wrapper">
+    <%- pageHtml %>
+  </div>
+</main>
 
-  <%- include('../partials/footer') %>
-</body>
-</html>
-
-<style>
-.vehicle-detail {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  padding: 2rem;
-}
-.vehicle-detail img {
-  width: 100%;
-  max-width: 500px;
-  object-fit: cover;
-}
-.vehicle-info {
-  flex: 1;
-  font-size: 1.1rem;
-}
-@media screen and (max-width: 768px) {
-  .vehicle-detail {
-    flex-direction: column;
-  }
-}
-</style>
+<%- include('../partials/footer') %>

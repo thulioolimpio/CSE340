@@ -1,14 +1,13 @@
-// routes/inventoryRoute.js
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const invController = require("../controllers/invController");
+const invController = require('../controllers/invController');
 
-// Exibir detalhe de veículo pelo ID
-router.get("/detail/:inv_id", invController.buildById);
+// Rota para exibir o detalhe de um veículo
+router.get('/detail/:inv_id', invController.buildDetailView);
 
-// Rota para erro 500 intencional
-router.get("/trigger-error", (req, res) => {
-  throw new Error("Erro intencional de servidor.");
+// Rota intencional para erro 500
+router.get('/trigger-error', (req, res, next) => {
+  next(new Error("Erro intencional gerado para teste."));
 });
 
 module.exports = router;
