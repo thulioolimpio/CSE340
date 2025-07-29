@@ -1,12 +1,16 @@
-<%- include('../partials/head') %>
-<%- include('../partials/header') %>
-<%- include('../partials/nav') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head', {title}) %>
+  <link rel="stylesheet" href="../css/inventory-detail.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <main class="detail-main">
+    <%- grid %>
+  </main>
 
-<main class="container">
-  <h1><%= title %></h1>
-  <div class="detail-wrapper">
-    <%- pageHtml %>
-  </div>
-</main>
-
-<%- include('../partials/footer') %>
+  <%- include('../partials/footer') %>
+</body>
+</html>

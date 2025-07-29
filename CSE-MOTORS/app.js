@@ -20,25 +20,28 @@ const inventoryRouter = require('./routes/inventoryRoute');
 app.use('/', indexRouter);
 app.use('/inv', inventoryRouter);
 
-// 404 NOT FOUND HANDLER
-app.use((req, res, next) => {
-  res.status(404).render('errors/error', {
-    title: 'Página não encontrada',
-    message: 'Desculpe, a página que você está procurando não foi encontrada.'
-  });
-});
-
-// 500 ERROR HANDLER (erro do servidor)
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).render('errors/error', {
-    title: 'Erro Interno do Servidor',
-    message: 'Ocorreu um erro inesperado. Tente novamente mais tarde.'
-  });
-});
-
 // SERVIDOR
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+// Error handling middleware (should be after all other middleware and routes)
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav();
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
+  
+  if (err.status === 404) {
+    res.status(404).render("errors/error", {
+      title: "404 Not Found",
+      message: err.message,
+      nav
+    });
+  } else {
+    res.status(500).render("errors/error", {
+      title: "500 Server Error",
+      message: "Something went wrong. Please try again later.",
+      nav
+    });
+  }
 });
