@@ -19,23 +19,22 @@ app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
 
-// 404 Error
-app.use(async (req, res) => {
-  const nav = await getNav(); // ou um nav fixo
+// 404 Error - para páginas não encontradas
+app.use((req, res) => {
   res.status(404).render("errors/error", {
-    title: "404 Not Found",
+    title: "404 - Not Found",
     message: "Sorry, we couldn't find that page.",
-    nav
+    nav: "" // não precisa de navegação dinâmica
   });
 });
 
-// 500 Error
-app.use(async (err, req, res, next) => {
+// 500 Error - para erros no servidor
+app.use((err, req, res, next) => {
   console.error(err.stack);
-  const nav = await getNav();
   res.status(500).render("errors/error", {
-    title: "500 Error",
-    message: "A server error occurred.",
-    nav
+    title: "500 - Server Error",
+    message: "Something went wrong on the server.",
+    nav: "" // não precisa de navegação dinâmica
   });
 });
+
