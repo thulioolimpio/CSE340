@@ -1,12 +1,16 @@
 <footer>
-    <p>&copy; <span id="current-year"></span> CSE Motors. All rights reserved.</p>
-    <p>Last Modified: <span id="last-modified"></span></p>
-    <p><a href="/trigger-error">Trigger Test Error</a></p>
+    <div class="container">
+        <p>
+            &copy; <span id="current-year">2025</span> CSE Motors | 
+            Última atualização: <span id="last-modified"></span>
+        </p>
+        <p><a href="/inv/trigger-error">Test Error Handling</a></p>
+    </div>
 
-
-
+    <script>
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    document.getElementById('last-modified').textContent = 
+        new Date(document.lastModified).toLocaleDateString('pt-BR');
+</script>
 
 </footer>
-<script src="/js/scripts.js"></script>
-
-

@@ -1,20 +1,22 @@
-const utilities = require("../utilities");
-const invModel = require("../models/inventory-model");
+const utilities = require('../utilities');
+const invModel = require('../models/inventory-model');
 
-// Build inventory by inventory_id view
-async function buildByInventoryId(req, res, next) {
-  const inv_id = req.params.invId;
-  const data = await invModel.getInventoryItemById(inv_id);
-  if (!data) {
-    next(new Error("Inventory item not found"));
-    return;
+async function buildByInvId(req, res, next) {
+  const invId = req.params.invId;
+  try {
+    const data = await invModel.getInventoryItemById(invId);
+    if (!data) {
+      throw new Error('Vehicle not found');
+    }
+    const detailHTML = await utilities.buildDetailView(data);
+    res.render("./inventory/detail", {
+      title: `${data.inv_make} ${data.inv_model}`,
+      detailHTML,
+      nav: await utilities.getNav()
+    });
+  } catch (error) {
+    next(error);
   }
-  const grid = await utilities.buildDetailView(data);
-  res.render("./inventory/detail", {
-    title: `${data.inv_make} ${data.inv_model}`,
-    grid,
-  });
 }
 
-// Don't forget to export the new function
-module.exports = { buildByClassificationId, buildByInventoryId };
+module.exports = { buildByInvId };

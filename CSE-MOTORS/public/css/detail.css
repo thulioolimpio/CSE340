@@ -1,0 +1,49 @@
+/* DETAIL PAGE STYLES */
+.detail-main {
+  padding: 2rem;
+}
+
+.detail-container {
+  display: grid;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.detail-image img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.detail-info {
+  padding: 1rem;
+}
+
+.detail-info h2 {
+  color: #2a4365;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.detail-info p {
+  margin: 1rem 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.detail-info strong {
+  color: #2a4365;
+  font-weight: 600;
+}
+
+@media (min-width: 768px) {
+  .detail-container {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+  
+  .detail-info {
+    padding: 2rem;
+  }
+}
