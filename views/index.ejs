@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <%- include('partials/head') %>
+    <%- include('partials/head', {title: 'CSE Motors - Home'}) %>
 </head>
 <body>
     <%- include('partials/header') %>
     <%- include('partials/nav') %>
     
-    <main>
+    <main class="main-content">
         <section class="hero">
-            <img src="/images/hero.jpg" alt="CSE Motors Showroom">
-            <div class="hero-text">
+            <img src="/images/hero.jpg" alt="DMC Delorean">
+            <div class="hero-content">
                 <h2>Welcome to CSE Motors</h2>
                 <p>Your trusted partner for quality vehicles</p>
-                <a href="/vehicles" class="cta-button">View Inventory</a>
+                <a href="/inv" class="cta-button">Own Today</a>
             </div>
         </section>
 
@@ -21,19 +21,29 @@
             <h2>Featured Vehicles</h2>
             <div class="vehicle-grid">
                 <div class="vehicle-card">
-                    <img src="/images/vehicle1.jpg" alt="Featured Vehicle 1">
-                    <h3>2023 Model X</h3>
-                    <p>Starting at $29,999</p>
+                    <img src="/images/vehicle2.jpg" alt="CSE Motors">
+                    <div class="vehicle-card-content">
+                        <h3>2023 Model X</h3>
+                        <p>Starting at $29,999</p>
+                        <a href="#" class="cta-button">Learn More</a>
+                    </div>
                 </div>
                 <div class="vehicle-card">
-                    <img src="/images/vehicle2.jpg" alt="Featured Vehicle 2">
-                    <h3>2023 Model Y</h3>
-                    <p>Starting at $34,999</p>
+                    <img src="/images/vehicle1.jpg" alt="New Vehicles">
+                    <div class="vehicle-card-content">
+                        <h3>2023 Model Y</h3>
+                        <p>Starting at $34,999</p>
+                        <a href="/inv" class="cta-button">View Inventory</a>
+                    </div>
                 </div>
                 <div class="vehicle-card">
-                    <img src="/images/vehicle3.jpg" alt="Featured Vehicle 3">
-                    <h3>2023 Model Z</h3>
-                    <p>Starting at $39,999</p>
+                    
+                    <div class="vehicle-card-content">
+                            <img src="/images/vehicle3.jpg" alt="Featured Vehicle 3">
+                            <h3>2023 Model Z</h3>
+                            <p>Starting at $39,999</p>
+                            <a href="/inv" class="cta-button">View Inventory</a>
+                    </div>
                 </div>
             </div>
         </section>
