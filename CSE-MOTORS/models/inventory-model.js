@@ -1,19 +1,23 @@
 const pool = require('../database/connection');
 const fs = require('fs').promises;
+const path = require('path');
 
+/**
+ * Obtém todas as classificações ordenadas por nome
+ */
 async function getClassifications() {
   try {
     const result = await pool.query(
       "SELECT * FROM classification ORDER BY classification_name"
     );
-    return result.rows || []; // Sempre retorna um array
+    return result.rows || [];
   } catch (error) {
     console.error("Error getting classifications:", error);
-    return []; // Retorna array vazio em caso de erro
+    return [];
   }
 }
+
 /**
- 
  * Verifica se uma classificação existe pelo nome
  */
 async function getClassificationByName(classification_name) {
@@ -186,7 +190,7 @@ async function addInventory(inventoryData) {
 }
 
 /**
- * Função adicional para verificação - obtém os últimos veículos adicionados
+ * Obtém os últimos veículos adicionados
  */
 async function getRecentAdditions(limit = 5) {
   try {
@@ -203,20 +207,7 @@ async function getRecentAdditions(limit = 5) {
   }
 }
 
-module.exports = {
-  getClassifications: async () => {
-    try {
-      const result = await pool.query(
-        "SELECT * FROM classification ORDER BY classification_name"
-      );
-      return result.rows || [];
-    } catch (error) {
-      console.error("Error getting classifications:", error);
-      return [];
-    }
-  },
-}
-
+// Exporta todas as funções de uma vez
 module.exports = {
   getClassifications,
   getClassificationByName,
