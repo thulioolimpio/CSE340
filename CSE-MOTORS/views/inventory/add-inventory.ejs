@@ -6,25 +6,27 @@
   <h1 class="page-title">Add Vehicle</h1>
   
   <!-- Flash Messages -->
-  <% if (locals.messages && Array.isArray(locals.messages) && locals.messages.length) { %>
-    <% locals.messages.forEach(function(msg) { %>
-      <div class="alert alert-<%= msg.type || 'info' %>">
-        <%= msg.message || msg.msg || 'Operation completed' %>
+  <% if (messages && messages.length) { %>
+    <% messages.forEach(function(message) { %>
+      <div class="alert alert-<%= message.type || 'info' %> alert-dismissible fade show">
+        <%= typeof message === 'string' ? message : (message.message || message.msg || 'Operation completed') %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
       </div>
     <% }) %>
   <% } %>
 
   <!-- Error Messages -->
-  <% if (locals.errors && Array.isArray(locals.errors) && locals.errors.length) { %>
+  <% if (errors && errors.length) { %>
     <div class="alert alert-danger">
       <ul class="mb-0">
-        <% locals.errors.forEach(function(error) { %>
+        <% errors.forEach(function(error) { %>
           <li><%= error.msg || error.message || error %></li>
         <% }) %>
       </ul>
     </div>
   <% } %>
-
   <form class="inventory-form" action="/inv/add-inventory" method="post" enctype="multipart/form-data">
     <!-- Classification -->
     <div class="form-group">

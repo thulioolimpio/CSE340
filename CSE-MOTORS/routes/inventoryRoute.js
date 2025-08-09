@@ -14,6 +14,19 @@ router.post('/add-classification', invController.addClassification);
 // Rotas de Veículos
 router.get('/add-inventory', invController.buildAddInventory);
 
+router.get('/management', async (req, res) => {
+  // Recuperar mensagem da sessão
+  const message = req.session.message;
+  // Limpar mensagem após recuperar
+  delete req.session.message;
+
+  res.render('inventory/management', {
+    title: 'Inventory Management',
+    nav: await utilities.getNav(),
+    messages: message ? [message] : []
+  });
+});
+
 // Validação para o formulário de veículo (usando as regras do controller)
 const validateInventory = invController.inventoryValidationRules;
 

@@ -223,22 +223,18 @@ async function addInventory(req, res, next) {
   
   if (!errors.isEmpty()) {
     const classifications = await invModel.getClassifications();
-    req.flash('error', 'Please correct the errors in the form');
     return res.render('inventory/add-inventory', {
       title: 'Add New Vehicle',
       nav: await utilities.getNav(),
       classifications,
       errors: errors.array(),
       formData: req.body,
-      messages: req.flash()
+      messages: { error: errors.array().map(e => e.msg) }
     });
   }
 
   try {
-    if (!req.files?.inv_image || !req.files?.inv_thumbnail) {
-      throw new Error('Both main image and thumbnail are required');
-    }
-
+    // Processar upload de arquivos
     const inventoryData = {
       classification_id: parseInt(req.body.classification_id),
       inv_make: req.body.inv_make.trim(),
@@ -248,8 +244,8 @@ async function addInventory(req, res, next) {
       inv_miles: parseInt(req.body.inv_miles),
       inv_color: req.body.inv_color.trim(),
       inv_description: req.body.inv_description?.trim() || '',
-      inv_image: `/images/vehicles/${req.files.inv_image[0].filename}`,
-      inv_thumbnail: `/images/vehicles/${req.files.inv_thumbnail[0].filename}`
+      inv_image: req.files?.inv_image ? `/images/vehicles/${req.files.inv_image[0].filename}` : '/images/vehicles/no-image.jpg',
+      inv_thumbnail: req.files?.inv_thumbnail ? `/images/vehicles/${req.files.inv_thumbnail[0].filename}` : '/images/vehicles/no-image-tn.jpg'
     };
 
     const newId = await invModel.addInventory(inventoryData);
@@ -257,18 +253,18 @@ async function addInventory(req, res, next) {
     
     if (!addedVehicle) throw new Error('Failed to retrieve added vehicle');
 
-    // MENSAGEM DE SUCESSO - FORMA GARANTIDA
-    req.session.flash = {
+    // Configurar mensagem de sucesso na sessão
+    req.session.message = {
       type: 'success',
-      message: `Vehicle ${addedVehicle.inv_make} ${addedVehicle.inv_model} added successfully!`
+      text: `Vehicle ${addedVehicle.inv_make} ${addedVehicle.inv_model} added successfully!`
     };
-    
+
     return res.redirect('/inv/management');
 
   } catch (error) {
     console.error('Error adding vehicle:', error);
 
-    // Limpar arquivos em caso de erro
+    // Limpar arquivos temporários em caso de erro
     if (req.files) {
       for (const fileArray of Object.values(req.files)) {
         for (const file of fileArray) {
@@ -279,22 +275,16 @@ async function addInventory(req, res, next) {
 
     const classifications = await invModel.getClassifications();
     
-    req.session.flash = {
-      type: 'error',
-      message: error.message
-    };
-    
     return res.render('inventory/add-inventory', {
       title: 'Add New Vehicle',
       nav: await utilities.getNav(),
       classifications,
       errors: [{ msg: error.message }],
       formData: req.body,
-      messages: req.session.flash
+      messages: { error: [error.message] }
     });
   }
 }
-
 /* ===================
    Module Exports
    =================== */

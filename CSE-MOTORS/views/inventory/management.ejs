@@ -5,19 +5,21 @@
 <main class="container management-page">
   <h1 class="page-title">Inventory Management</h1>
   
-  <!-- Flash Messages - Working Version -->
-  <% if (typeof messages !== 'undefined' && (messages.success || messages.error)) { %>
+  <!-- Flash Messages - Fixed Version -->
+  <% if (locals.messages) { %>
     <div class="flash-container">
-      <% if (messages.success && messages.success.length > 0) { %>
+      <% if (messages.success) { %>
         <div class="flash-message success">
-          <%= messages.success[0] %>
+          <i class="fas fa-check-circle"></i>
+          <span><%= Array.isArray(messages.success) ? messages.success[0] : messages.success %></span>
           <button class="flash-close">&times;</button>
         </div>
       <% } %>
 
-      <% if (messages.error && messages.error.length > 0) { %>
+      <% if (messages.error) { %>
         <div class="flash-message error">
-          <%= messages.error[0] %>
+          <i class="fas fa-exclamation-circle"></i>
+          <span><%= Array.isArray(messages.error) ? messages.error[0] : messages.error %></span>
           <button class="flash-close">&times;</button>
         </div>
       <% } %>
@@ -25,11 +27,11 @@
   <% } %>
 
   <!-- Recent Additions Section -->
-  <% if (locals.recentAdditions && locals.recentAdditions.length > 0) { %>
+  <% if (locals.recentAdditions && recentAdditions.length > 0) { %>
     <section class="recent-additions">
       <h2><i class="fas fa-clock"></i> Recently Added</h2>
       <div class="recent-grid">
-        <% locals.recentAdditions.forEach(vehicle => { %>
+        <% recentAdditions.forEach(vehicle => { %>
           <div class="recent-item">
             <div class="recent-thumbnail">
               <img src="<%= vehicle.inv_thumbnail || '/images/vehicles/no-image-tn.jpg' %>" 
@@ -113,6 +115,15 @@
     animation: slideIn 0.3s ease-out;
   }
 
+  .flash-message i {
+    margin-right: 10px;
+    font-size: 1.2em;
+  }
+
+  .flash-message span {
+    flex-grow: 1;
+  }
+
   .flash-message.success {
     background-color: #d4edda;
     color: #155724;
@@ -133,6 +144,12 @@
     cursor: pointer;
     margin-left: 15px;
     line-height: 1;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .flash-close:hover {
+    opacity: 1;
   }
 
   @keyframes slideIn {
