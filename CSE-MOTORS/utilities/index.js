@@ -1,5 +1,4 @@
-const path = require('path');
-const invModel = require(path.join(__dirname, '../models/inventory-model'));
+const invModel = require("../models/inventory-model");
 
 console.log('Inventory model loaded:', 
   invModel ? 'Success' : 'Failed', 

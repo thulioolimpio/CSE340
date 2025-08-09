@@ -15,20 +15,8 @@ console.log('Inventory model initialized - Connection status:',
 })();
 
 async function getClassifications() {
-  const client = await pool.connect();
-  try {
-    const result = await client.query(
-      `SELECT classification_id, classification_name 
-       FROM classification 
-       ORDER BY classification_name`
-    );
-    return result.rows || [];
-  } catch (error) {
-    console.error('Database query error:', error);
-    return []; // Retorna array vazio em caso de erro
-  } finally {
-    client.release();
-  }
+  const data = await pool.query("SELECT * FROM classification ORDER BY classification_name");
+  return data.rows;
 }
 
 /**
