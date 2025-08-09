@@ -1,4 +1,5 @@
-const invModel = require('../models/inventory-model');
+const path = require('path');
+const invModel = require(path.join(__dirname, '../models/inventory-model'));
 
 // Formatação de valores
 function formatPrice(price) {
@@ -36,7 +37,9 @@ function buildDetailView(data) {
 
 async function getNav() {
   try {
+    console.log('invModel contents:', Object.keys(invModel));
     const data = await invModel.getClassifications();
+
     
     // Verificação adicional
     if (!data || !Array.isArray(data)) {
