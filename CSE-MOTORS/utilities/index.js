@@ -1,5 +1,8 @@
-const path = require('path');
-const invModel = require(path.join(__dirname, '../models/inventory-model'));
+const invModel = require('./../models/inventory-model');
+
+console.log('Módulo invModel carregado:', invModel ? 'Sim' : 'Não');
+console.log('Métodos disponíveis:', Object.keys(invModel || {}));
+
 
 // Formatação de valores
 function formatPrice(price) {
@@ -39,6 +42,12 @@ async function getNav() {
   try {
     console.log('invModel contents:', Object.keys(invModel));
     const data = await invModel.getClassifications();
+
+   if (!invModel || typeof invModel.getClassifications !== 'function') {
+      console.error('Erro crítico: invModel não carregado corretamente');
+      console.error('Conteúdo de invModel:', invModel);
+      return buildFallbackNav();
+    }
 
     
     // Verificação adicional
