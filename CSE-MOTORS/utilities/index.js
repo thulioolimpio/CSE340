@@ -1,11 +1,9 @@
 const path = require('path');
 const invModel = require(path.join(__dirname, '../models/inventory-model'));
 
-console.log('Módulo invModel carregado:', {
-  exists: !!invModel,
-  methods: Object.keys(invModel || {})
-});
-
+console.log('Inventory model loaded:', 
+  invModel ? 'Success' : 'Failed', 
+  'Methods:', Object.keys(invModel || {}));
 
 // Funções auxiliares
 function formatPrice(price) {
@@ -45,45 +43,27 @@ async function getNav() {
   const fallbackNav = '<ul><li><a href="/">Home</a></li><li><a href="/inv">Inventory</a></li></ul>';
   
   try {
-    // Verificação EXTRA do módulo
-    if (!invModel) {
-      const fs = require('fs');
-      const path = require('path');
-      
-      console.error('CRÍTICO: invModel não carregado', {
-        modulePath: path.resolve(__dirname, '../models/inventory-model.js'),
-        dirExists: fs.existsSync(path.dirname(module.filename)),
-        filesInModels: fs.readdirSync(path.join(__dirname, '../models'))
-      });
-      
+    if (!invModel?.getClassifications) {
+      console.error('getClassifications method not found');
       return fallbackNav;
     }
 
-    // Obtenção dos dados
-    console.log('Attempting to get classifications...');
     const data = await invModel.getClassifications();
     
-    // Construção da navegação
-    if (Array.isArray(data) && data.length > 0) {
-      let navList = '<ul>';
-      data.forEach(item => {
-        navList += `<li><a href="/inv/type/${item.classification_id}">${item.classification_name}</a></li>`;
-      });
-      navList += '</ul>';
-      return navList;
+    if (!Array.isArray(data)) {
+      console.error('Invalid data received:', data);
+      return fallbackNav;
     }
+
+    return data.reduce((nav, item) => {
+      return nav + `<li><a href="/inv/type/${item.classification_id}">${item.classification_name}</a></li>`;
+    }, '<ul>') + '</ul>';
     
-    return fallbackNav;
   } catch (error) {
-    console.error('Falha catastrófica em getNav:', {
-      error: error.stack,
-      invModelStatus: invModel ? 'Loaded' : 'Not loaded',
-      timestamp: new Date().toISOString()
-    });
+    console.error('Navigation error:', error);
     return fallbackNav;
   }
 }
-
 async function buildClassificationList(classification_id = null) {
   try {
     if (!invModel || typeof invModel.getClassifications !== 'function') {

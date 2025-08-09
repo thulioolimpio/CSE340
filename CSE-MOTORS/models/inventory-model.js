@@ -1,4 +1,4 @@
-const pool = require('../database/connection');
+const { pool, testConnection } = require('../database/connection');
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -8,34 +8,24 @@ const path = require('path');
 console.log('Inventory model initialized - Connection status:', 
   testConnection() ? 'OK' : 'FAILED');
 
+(async () => {
+  const connStatus = await testConnection();
+  console.log('Inventory model initialized - Connection status:', 
+    connStatus.success ? 'OK' : 'FAILED');
+})();
+
 async function getClassifications() {
   const client = await pool.connect();
   try {
-    console.log('Executing getClassifications query');
     const result = await client.query(
       `SELECT classification_id, classification_name 
        FROM classification 
        ORDER BY classification_name`
     );
-    
-    if (!result.rows) {
-      throw new Error('No rows returned from query');
-    }
-    
-    console.log(`Found ${result.rows.length} classifications`);
-    return result.rows;
+    return result.rows || [];
   } catch (error) {
-    console.error('Error in getClassifications:', {
-      error: error.message,
-      query: 'SELECT * FROM classification ORDER BY classification_name',
-      timestamp: new Date().toISOString()
-    });
-    
-    // Fallback hardcoded para emergências
-    return [
-      { classification_id: 1, classification_name: 'Default' },
-      { classification_id: 2, classification_name: 'Emergency' }
-    ];
+    console.error('Database query error:', error);
+    return []; // Retorna array vazio em caso de erro
   } finally {
     client.release();
   }
