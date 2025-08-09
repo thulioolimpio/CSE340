@@ -1,4 +1,5 @@
 const express = require('express');
+const routes = require('./routes');
 const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -81,8 +82,23 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+
+  
+  // Configurações do app...
+  app.set('view engine', 'ejs');
+  app.use(express.static('public'));
+
+  // Rotas
+  app.use('/', routes);
+
+  // Error handling
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+  });
+
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+
