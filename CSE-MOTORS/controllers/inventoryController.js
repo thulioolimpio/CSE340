@@ -134,7 +134,7 @@ async function addClassification(req, res, next) {
 
     const newClassification = await invModel.addClassification(classification_name);
     req.flash('success', `Classification "${newClassification.classification_name}" added successfully!`);
-    res.redirect('/inv/management');
+    res.redirect('/inv');
   } catch (error) {
     console.error('Error adding classification:', error);
     req.flash('error', error.message);
