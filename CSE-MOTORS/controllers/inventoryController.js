@@ -259,7 +259,7 @@ async function addInventory(req, res, next) {
       text: `Vehicle ${addedVehicle.inv_make} ${addedVehicle.inv_model} added successfully!`
     };
 
-    return res.redirect('/inv/management');
+    return res.redirect('/inv/');
 
   } catch (error) {
     console.error('Error adding vehicle:', error);
