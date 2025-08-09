@@ -32,23 +32,54 @@ function buildDetailView(data) {
 }
 
 // Navigation
+
+
 async function getNav() {
   try {
     const data = await invModel.getClassifications();
-    let nav = '<ul>';
-    data.rows.forEach(item => {
-      nav += `<li><a href="/inv/type/${item.classification_id}">${item.classification_name}</a></li>`;
+    
+    // Verificação adicional
+    if (!data || !Array.isArray(data)) {
+      console.error('Invalid classifications data:', data);
+      return '<nav><ul><li>Error loading navigation</li></ul></nav>';
+    }
+
+    let navList = '<ul>';
+    data.forEach((item) => {
+      navList += `<li><a href="/inv/type/${item.classification_id}">${item.classification_name}</a></li>`;
     });
-    nav += '</ul>';
-    return nav;
+    navList += '</ul>';
+    
+    return navList;
   } catch (error) {
-    console.error("Error building navigation:", error);
-    return buildFallbackNav();
+    console.error('Error building navigation:', error);
+    return '<nav><ul><li>Navigation Error</li></ul></nav>';
   }
 }
 
+module.exports = { getNav };
+
 function buildFallbackNav() {
   return '<ul><li><a href="/">Home</a></li><li><a href="/inv">Inventory</a></li></ul>';
+}
+
+// Build Classification List for Forms
+async function buildClassificationList(classification_id = null) {
+  let data = await invModel.getClassifications();
+  let classificationList = 
+    '<select name="classification_id" id="classificationList" required>';
+  classificationList += "<option value=''>Choose a Classification</option>";
+  
+  data.rows.forEach((row) => {
+    classificationList += `<option value="${row.classification_id}"`;
+    if (classification_id != null && row.classification_id == classification_id) {
+      classificationList += " selected ";
+    }
+    classificationList += `>${row.classification_name}</option>`;
+  });
+  
+  classificationList += "</select>";
+  return classificationList;
 }
 
 // Error Handling Wrapper
@@ -58,10 +89,13 @@ function handleErrors(fn) {
   };
 }
 
+// Exportação única e organizada
 module.exports = {
   buildDetailView,
   getNav,
+  buildClassificationList,
   handleErrors,
   formatPrice,
-  formatMileage
+  formatMileage,
+  buildFallbackNav
 };

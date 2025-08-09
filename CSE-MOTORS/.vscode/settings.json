@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": true
+                }
+            },
+            "previewLimit": 50,
+            "server": "dpg-d2709teuk2gs73cm9r5g-a.oregon-postgres.render.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "meubanco1",
+            "database": "cse340_motors",
+            "username": "cse340_motors_user",
+            "password": "4dd1IaZtqdkYeSmllXq0fCUXp8bpHfHT"
+        }
+    ]
+}

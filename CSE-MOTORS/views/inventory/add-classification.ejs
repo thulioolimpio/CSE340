@@ -1,0 +1,50 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/nav') %>
+
+<main class="management-container">
+  <h1 class="management-title">Add New Classification</h1>
+  
+  <% if (messages && messages.length > 0) { %>
+  <% messages.forEach(msg => { %>
+    <div class="alert alert-<%= msg.type %>">
+      <strong><%= msg.type.toUpperCase() %>:</strong> <%= msg.message || msg.msg %>
+    </div>
+  <% }); %>
+  <% } %>
+
+  <form class="add-classification-form" action="/inv/add-classification" method="post">
+    <div class="form-group">
+      <label for="classification_name">Classification Name</label>
+      <input 
+        type="text" 
+        id="classification_name" 
+        name="classification_name" 
+        class="<%= errors && errors.classification_name ? 'is-invalid' : '' %>"
+        value="<%= classification_name || '' %>" 
+        required
+        pattern="^[a-zA-Z0-9]+$">
+      
+      <% if (errors && errors.classification_name) { %>
+        <div class="invalid-feedback">
+          <%= errors.classification_name.msg %>
+        </div>
+      <% } %>
+      
+      <small class="form-hint">
+        Use a single word without spaces or special characters (e.g., "SUV", "Sedan")
+      </small>
+    </div>
+    
+    <div class="add-classification-actions">
+      <a href="/inv" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Cancel
+      </a>
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-save"></i> Save Classification
+      </button>
+    </div>
+  </form>
+</main>
+
+<%- include('../partials/footer') %>

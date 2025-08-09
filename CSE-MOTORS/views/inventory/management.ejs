@@ -1,0 +1,258 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<%- include('../partials/nav') %>
+
+<main class="container management-page">
+  <h1 class="page-title">Inventory Management</h1>
+  
+  <!-- Flash Messages - Working Version -->
+  <% if (typeof messages !== 'undefined' && (messages.success || messages.error)) { %>
+    <div class="flash-container">
+      <% if (messages.success && messages.success.length > 0) { %>
+        <div class="flash-message success">
+          <%= messages.success[0] %>
+          <button class="flash-close">&times;</button>
+        </div>
+      <% } %>
+
+      <% if (messages.error && messages.error.length > 0) { %>
+        <div class="flash-message error">
+          <%= messages.error[0] %>
+          <button class="flash-close">&times;</button>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+  <!-- Recent Additions Section -->
+  <% if (locals.recentAdditions && locals.recentAdditions.length > 0) { %>
+    <section class="recent-additions">
+      <h2><i class="fas fa-clock"></i> Recently Added</h2>
+      <div class="recent-grid">
+        <% locals.recentAdditions.forEach(vehicle => { %>
+          <div class="recent-item">
+            <div class="recent-thumbnail">
+              <img src="<%= vehicle.inv_thumbnail || '/images/vehicles/no-image-tn.jpg' %>" 
+                   alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>">
+            </div>
+            <div class="recent-details">
+              <h3><%= vehicle.inv_make %> <%= vehicle.inv_model %></h3>
+              <p><%= vehicle.inv_year %> • <%= vehicle.inv_miles.toLocaleString() %> miles</p>
+              <p class="price">$<%= vehicle.inv_price.toLocaleString() %></p>
+              <a href="/inv/detail/<%= vehicle.inv_id %>" class="btn btn-sm btn-outline-primary">
+                View Details
+              </a>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    </section>
+  <% } %>
+
+  <!-- Management Actions -->
+  <section class="management-actions">
+    <h2><i class="fas fa-cog"></i> Management Tools</h2>
+    <div class="action-grid">
+      <div class="action-card">
+        <div class="card-icon">
+          <i class="fas fa-tags"></i>
+        </div>
+        <h3>Classifications</h3>
+        <p>Manage vehicle categories</p>
+        <div class="action-buttons">
+          <a href="/inv/add-classification" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New
+          </a>
+          <a href="/inv/classifications" class="btn btn-secondary">
+            <i class="fas fa-list"></i> View All
+          </a>
+        </div>
+      </div>
+      
+      <div class="action-card">
+        <div class="card-icon">
+          <i class="fas fa-car"></i>
+        </div>
+        <h3>Inventory</h3>
+        <p>Manage vehicle inventory</p>
+        <div class="action-buttons">
+          <a href="/inv/add-inventory" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New
+          </a>
+          <a href="/inv/list" class="btn btn-secondary">
+            <i class="fas fa-list"></i> View All
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
+
+<style>
+  /* Flash Messages Styles */
+  .flash-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 400px;
+    width: 90%;
+  }
+
+  .flash-message {
+    position: relative;
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    animation: slideIn 0.3s ease-out;
+  }
+
+  .flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+  }
+
+  .flash-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+  }
+
+  .flash-close {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 15px;
+    line-height: 1;
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  /* Layout Styles */
+  .management-page {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+  }
+
+  .page-title {
+    margin-bottom: 2rem;
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  .recent-additions {
+    margin-bottom: 3rem;
+  }
+
+  .recent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .recent-item {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+
+  .recent-item:hover {
+    transform: translateY(-5px);
+  }
+
+  .recent-thumbnail img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .recent-details {
+    padding: 1.5rem;
+  }
+
+  .recent-details h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+
+  .price {
+    font-weight: bold;
+    color: #27ae60;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+  }
+
+  .management-actions {
+    margin-top: 3rem;
+  }
+
+  .action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+
+  .action-card {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  .card-icon {
+    font-size: 2.5rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+  }
+
+  .action-card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+  }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+</style>
+
+<script>
+  // Flash Message Handling
+  document.addEventListener('DOMContentLoaded', function() {
+    // Close button functionality
+    document.querySelectorAll('.flash-close').forEach(button => {
+      button.addEventListener('click', function() {
+        this.parentElement.style.opacity = '0';
+        setTimeout(() => this.parentElement.remove(), 300);
+      });
+    });
+    
+    // Auto-remove messages after 5 seconds
+    setTimeout(() => {
+      document.querySelectorAll('.flash-message').forEach(message => {
+        message.style.opacity = '0';
+        setTimeout(() => message.remove(), 300);
+      });
+    }, 5000);
+  });
+</script>
