@@ -1,10 +1,10 @@
 const invModel = require('./../models/inventory-model');
 
+// Debug: Verifique o módulo carregado
 console.log('Módulo invModel carregado:', invModel ? 'Sim' : 'Não');
 console.log('Métodos disponíveis:', Object.keys(invModel || {}));
 
-
-// Formatação de valores
+// Funções auxiliares
 function formatPrice(price) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -16,7 +16,10 @@ function formatMileage(miles) {
   return new Intl.NumberFormat('en-US').format(miles);
 }
 
-// Build Vehicle Detail View
+function buildFallbackNav() {
+  return '<ul><li><a href="/">Home</a></li><li><a href="/inv">Inventory</a></li></ul>';
+}
+
 function buildDetailView(data) {
   return `
     <div class="detail-container">
@@ -35,25 +38,22 @@ function buildDetailView(data) {
   `;
 }
 
-// Navigation
-
-
 async function getNav() {
   try {
-    console.log('invModel contents:', Object.keys(invModel));
-    const data = await invModel.getClassifications();
-
-   if (!invModel || typeof invModel.getClassifications !== 'function') {
+    // Verificação ANTES de chamar a função
+    if (!invModel || typeof invModel.getClassifications !== 'function') {
       console.error('Erro crítico: invModel não carregado corretamente');
       console.error('Conteúdo de invModel:', invModel);
       return buildFallbackNav();
     }
 
-    
-    // Verificação adicional
+    console.log('Chamando invModel.getClassifications()');
+    const data = await invModel.getClassifications();
+    console.log('Dados recebidos:', data);
+
     if (!data || !Array.isArray(data)) {
       console.error('Invalid classifications data:', data);
-      return '<nav><ul><li>Error loading navigation</li></ul></nav>';
+      return buildFallbackNav();
     }
 
     let navList = '<ul>';
@@ -65,43 +65,44 @@ async function getNav() {
     return navList;
   } catch (error) {
     console.error('Error building navigation:', error);
-    return '<nav><ul><li>Navigation Error</li></ul></nav>';
+    return buildFallbackNav();
   }
 }
 
-module.exports = { getNav };
-
-function buildFallbackNav() {
-  return '<ul><li><a href="/">Home</a></li><li><a href="/inv">Inventory</a></li></ul>';
-}
-
-// Build Classification List for Forms
 async function buildClassificationList(classification_id = null) {
-  let data = await invModel.getClassifications();
-  let classificationList = 
-    '<select name="classification_id" id="classificationList" required>';
-  classificationList += "<option value=''>Choose a Classification</option>";
-  
-  data.rows.forEach((row) => {
-    classificationList += `<option value="${row.classification_id}"`;
-    if (classification_id != null && row.classification_id == classification_id) {
-      classificationList += " selected ";
+  try {
+    if (!invModel || typeof invModel.getClassifications !== 'function') {
+      console.error('Modelo não carregado para buildClassificationList');
+      return '<select><option>Error loading classifications</option></select>';
     }
-    classificationList += `>${row.classification_name}</option>`;
-  });
-  
-  classificationList += "</select>";
-  return classificationList;
+
+    const data = await invModel.getClassifications();
+    let classificationList = '<select name="classification_id" id="classificationList" required>';
+    classificationList += "<option value=''>Choose a Classification</option>";
+    
+    data.forEach((row) => {
+      classificationList += `<option value="${row.classification_id}"`;
+      if (classification_id != null && row.classification_id == classification_id) {
+        classificationList += " selected ";
+      }
+      classificationList += `>${row.classification_name}</option>`;
+    });
+    
+    classificationList += "</select>";
+    return classificationList;
+  } catch (error) {
+    console.error('Error building classification list:', error);
+    return '<select><option>Error loading classifications</option></select>';
+  }
 }
 
-// Error Handling Wrapper
 function handleErrors(fn) {
   return function(req, res, next) {
     return fn(req, res, next).catch(next);
   };
 }
 
-// Exportação única e organizada
+// Exportação única
 module.exports = {
   buildDetailView,
   getNav,

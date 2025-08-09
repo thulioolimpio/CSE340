@@ -204,6 +204,20 @@ async function getRecentAdditions(limit = 5) {
 }
 
 module.exports = {
+  getClassifications: async () => {
+    try {
+      const result = await pool.query(
+        "SELECT * FROM classification ORDER BY classification_name"
+      );
+      return result.rows || [];
+    } catch (error) {
+      console.error("Error getting classifications:", error);
+      return [];
+    }
+  },
+}
+
+module.exports = {
   getClassifications,
   getClassificationByName,
   addClassification,
