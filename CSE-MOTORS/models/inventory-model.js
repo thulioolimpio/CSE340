@@ -5,15 +5,39 @@ const path = require('path');
 /**
  * Obtém todas as classificações ordenadas por nome
  */
+console.log('Inventory model initialized - Connection status:', 
+  testConnection() ? 'OK' : 'FAILED');
+
 async function getClassifications() {
+  const client = await pool.connect();
   try {
-    const result = await pool.query(
-      "SELECT * FROM classification ORDER BY classification_name"
+    console.log('Executing getClassifications query');
+    const result = await client.query(
+      `SELECT classification_id, classification_name 
+       FROM classification 
+       ORDER BY classification_name`
     );
-    return result.rows || [];
+    
+    if (!result.rows) {
+      throw new Error('No rows returned from query');
+    }
+    
+    console.log(`Found ${result.rows.length} classifications`);
+    return result.rows;
   } catch (error) {
-    console.error("Error getting classifications:", error);
-    return [];
+    console.error('Error in getClassifications:', {
+      error: error.message,
+      query: 'SELECT * FROM classification ORDER BY classification_name',
+      timestamp: new Date().toISOString()
+    });
+    
+    // Fallback hardcoded para emergências
+    return [
+      { classification_id: 1, classification_name: 'Default' },
+      { classification_id: 2, classification_name: 'Emergency' }
+    ];
+  } finally {
+    client.release();
   }
 }
 

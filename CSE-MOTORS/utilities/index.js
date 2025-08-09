@@ -1,8 +1,11 @@
-const invModel = require('./../models/inventory-model');
+const path = require('path');
+const invModel = require(path.join(__dirname, '../models/inventory-model'));
 
-// Debug: Verifique o módulo carregado
-console.log('Módulo invModel carregado:', invModel ? 'Sim' : 'Não');
-console.log('Métodos disponíveis:', Object.keys(invModel || {}));
+console.log('Módulo invModel carregado:', {
+  exists: !!invModel,
+  methods: Object.keys(invModel || {})
+});
+
 
 // Funções auxiliares
 function formatPrice(price) {
@@ -39,33 +42,45 @@ function buildDetailView(data) {
 }
 
 async function getNav() {
+  const fallbackNav = '<ul><li><a href="/">Home</a></li><li><a href="/inv">Inventory</a></li></ul>';
+  
   try {
-    // Verificação ANTES de chamar a função
-    if (!invModel || typeof invModel.getClassifications !== 'function') {
-      console.error('Erro crítico: invModel não carregado corretamente');
-      console.error('Conteúdo de invModel:', invModel);
-      return buildFallbackNav();
+    // Verificação EXTRA do módulo
+    if (!invModel) {
+      const fs = require('fs');
+      const path = require('path');
+      
+      console.error('CRÍTICO: invModel não carregado', {
+        modulePath: path.resolve(__dirname, '../models/inventory-model.js'),
+        dirExists: fs.existsSync(path.dirname(module.filename)),
+        filesInModels: fs.readdirSync(path.join(__dirname, '../models'))
+      });
+      
+      return fallbackNav;
     }
 
-    console.log('Chamando invModel.getClassifications()');
+    // Obtenção dos dados
+    console.log('Attempting to get classifications...');
     const data = await invModel.getClassifications();
-    console.log('Dados recebidos:', data);
-
-    if (!data || !Array.isArray(data)) {
-      console.error('Invalid classifications data:', data);
-      return buildFallbackNav();
-    }
-
-    let navList = '<ul>';
-    data.forEach((item) => {
-      navList += `<li><a href="/inv/type/${item.classification_id}">${item.classification_name}</a></li>`;
-    });
-    navList += '</ul>';
     
-    return navList;
+    // Construção da navegação
+    if (Array.isArray(data) && data.length > 0) {
+      let navList = '<ul>';
+      data.forEach(item => {
+        navList += `<li><a href="/inv/type/${item.classification_id}">${item.classification_name}</a></li>`;
+      });
+      navList += '</ul>';
+      return navList;
+    }
+    
+    return fallbackNav;
   } catch (error) {
-    console.error('Error building navigation:', error);
-    return buildFallbackNav();
+    console.error('Falha catastrófica em getNav:', {
+      error: error.stack,
+      invModelStatus: invModel ? 'Loaded' : 'Not loaded',
+      timestamp: new Date().toISOString()
+    });
+    return fallbackNav;
   }
 }
 
