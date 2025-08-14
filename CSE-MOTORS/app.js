@@ -1,21 +1,29 @@
+require('dotenv').config(); // Garantir que as variáveis do .env sejam carregadas
 const express = require('express');
 const routes = require('./routes');
 const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
-const app = express();
+const cookieParser = require('cookie-parser');
+const { attachUser } = require('./src/middleware/auth');
 const utilities = require('./utilities');
 
-// Configurações
+const app = express();
+
+// === Configurações ===
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+// Agora o Express procura em duas pastas diferentes
+app.set('views', [
+  path.join(__dirname, 'views'),
+  path.join(__dirname, 'src', 'views','partials')
+]);
 
 // Middlewares
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// Configuração de sessão
 // Configuração de sessão
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -27,45 +35,51 @@ app.use(session({
   }
 }));
 
-// Middleware para passar mensagens para as views
+// Middleware para mensagens na sessão
 app.use((req, res, next) => {
-  // Transferir mensagem da sessão para locals
   if (req.session.message) {
     res.locals.message = req.session.message;
     delete req.session.message;
   }
   next();
 });
+
 // Configuração do flash
 app.use(flash());
 
-// Middleware para garantir persistência de mensagens
+// Persistência das mensagens
 app.use((req, res, next) => {
   res.locals.session = req.session;
   next();
 });
 
-// Middleware para variáveis locais
+// Variáveis locais padrão
 app.use(async (req, res, next) => {
-  // Passar todas as mensagens flash
   res.locals.messages = req.flash();
-  
-  // Identificar a rota atual
   res.locals.current = req.path.split('/')[1] || 'home';
-  
-  // Obter navegação
   res.locals.nav = await utilities.getNav();
-  
   next();
 });
 
-// Rotas
+// Adiciona user do JWT
+app.use(attachUser);
+
+// Disponibiliza usuário logado nas views
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
+// === Rotas ===
 const indexRouter = require('./routes/index');
 const inventoryRouter = require('./routes/inventoryRoute');
+const accountRouter = require('./src/routes/accountRoutes');
+
 app.use('/', indexRouter);
 app.use('/inv', inventoryRouter);
+app.use('/account', accountRouter);
 
-// Error Handling
+// === Tratamento de erros ===
 app.use((req, res, next) => {
   res.status(404).render("errors/404", {
     title: "404 Not Found",
@@ -82,23 +96,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Removido o trecho duplicado que sobrescrevia configurações
+// para evitar conflitos de rotas e view engine
 
-  
-  // Configurações do app...
-  app.set('view engine', 'ejs');
-  app.use(express.static('public'));
-
-  // Rotas
-  app.use('/', routes);
-
-  // Error handling
-  app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
-  });
-
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

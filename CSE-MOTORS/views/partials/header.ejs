@@ -1,4 +1,5 @@
 <header class="header">
+  
   <div class="container header-container">
     <a href="/" class="logo">
       <img src="/images/logo.png" alt="CSE Motors Logo">
@@ -11,24 +12,29 @@
     </button>
     <nav class="navigation">
       <ul class="nav-links">
-        <li><a href="/" class="active">Home</a></li>
-        <li><a href="/inv/detail/1">Inventory</a></li>
+        <li><a href="/" class="<%= current === 'home' ? 'active' : '' %>">Home</a></li>
+        <li><a href="/inv/detail/1" class="<%= current === 'inventory' ? 'active' : '' %>">Inventory</a></li>
         <li><a href="#">Services</a></li>
         <li><a href="#">Contact</a></li>
+
+        <% if (!user) { %>
+          <li><a href="/account/login">Login</a></li>
+          <li><a href="/account/register">Registrar</a></li>
+        <% } else { %>
+          <li><a href="/account/management">Bem-vindo <%= user.account_firstname %></a></li>
+          <li><a href="/account/logout">Logout</a></li>
+        <% } %>
       </ul>
     </nav>
   </div>
 
   <script>
-  // Função auto-executável para evitar poluição do escopo global
   (function() {
-    // Espera o DOM estar pronto
     document.addEventListener('DOMContentLoaded', function() {
       const hamburger = document.querySelector('.hamburger');
       const navLinks = document.querySelector('.nav-links');
       
       if (hamburger && navLinks) {
-        // Função para alternar o menu
         const toggleMenu = () => {
           const isActive = navLinks.classList.toggle('active');
           hamburger.setAttribute('aria-expanded', isActive);
@@ -36,10 +42,8 @@
           document.body.style.overflow = isActive ? 'hidden' : '';
         };
 
-        // Evento de clique no hamburguer
         hamburger.addEventListener('click', toggleMenu);
 
-        // Fechar menu ao clicar em links (mobile)
         document.querySelectorAll('.nav-links a').forEach(link => {
           link.addEventListener('click', () => {
             if (navLinks.classList.contains('active')) {
@@ -48,7 +52,6 @@
           });
         });
 
-        // Fechar menu ao pressionar ESC
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape' && navLinks.classList.contains('active')) {
             toggleMenu();
@@ -57,7 +60,6 @@
       }
     });
 
-    // Fallback caso o script carregue depois do DOMContentLoaded
     if (document.readyState !== 'loading') {
       const hamburger = document.querySelector('.hamburger');
       const navLinks = document.querySelector('.nav-links');

@@ -1,0 +1,75 @@
+<header class="header">
+  <link rel="stylesheet" href="../../../public/css/main.css">
+  <div class="container header-container">
+    <a href="/" class="logo">
+      <img src="/images/logo.png" alt="CSE Motors Logo">
+      <h1>CSE Motors</h1>
+    </a>
+    <button class="hamburger" aria-label="Menu" aria-expanded="false">
+      <span class="hamburger-box">
+        <span class="hamburger-inner"></span>
+      </span>
+    </button>
+    <nav class="navigation">
+      <ul class="nav-links">
+        <li><a href="/" class="<%= current === 'home' ? 'active' : '' %>">Home</a></li>
+        <li><a href="/inv/detail/1" class="<%= current === 'inventory' ? 'active' : '' %>">Inventory</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+
+        <% if (!user) { %>
+          <li><a href="/account/login">My Account</a></li>
+          <li><a href="/account/register">Registrar</a></li>
+        <% } else { %>
+          <li><a href="/account/management">Bem-vindo <%= user.account_firstname %></a></li>
+          <li><a href="/account/logout">Logout</a></li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+
+  <script>
+  (function() {
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (hamburger && navLinks) {
+        const toggleMenu = () => {
+          const isActive = navLinks.classList.toggle('active');
+          hamburger.setAttribute('aria-expanded', isActive);
+          hamburger.classList.toggle('active');
+          document.body.style.overflow = isActive ? 'hidden' : '';
+        };
+
+        hamburger.addEventListener('click', toggleMenu);
+
+        document.querySelectorAll('.nav-links a').forEach(link => {
+          link.addEventListener('click', () => {
+            if (navLinks.classList.contains('active')) {
+              toggleMenu();
+            }
+          });
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+            toggleMenu();
+          }
+        });
+      }
+    });
+
+    if (document.readyState !== 'loading') {
+      const hamburger = document.querySelector('.hamburger');
+      const navLinks = document.querySelector('.nav-links');
+      
+      if (hamburger && navLinks) {
+        const isActive = navLinks.classList.contains('active');
+        hamburger.setAttribute('aria-expanded', isActive);
+        document.body.style.overflow = isActive ? 'hidden' : '';
+      }
+    }
+  })();
+  </script>
+</header>

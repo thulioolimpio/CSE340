@@ -1,0 +1,23 @@
+<!-- Account Update Form -->
+<form id="account-update-form" action="/account/update" method="post">
+  <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+  
+  <label for="account_firstname">First Name:</label>
+  <input type="text" id="account_firstname" name="account_firstname" 
+         value="<%= accountData.account_firstname %>" required>
+  
+  <!-- Similar for lastname and email -->
+  
+  <input type="submit" value="Update Account">
+</form>
+
+<!-- Password Change Form -->
+<form id="password-change-form" action="/account/update-password" method="post">
+  <input type="hidden" name="account_id" value="<%= accountData.account_id %>">
+  
+  <label for="account_password">New Password:</label>
+  <input type="password" id="account_password" name="account_password" required>
+  <small>Password must be at least 12 characters with at least 1 uppercase, 1 lowercase, 1 number, and 1 special character</small>
+  
+  <input type="submit" value="Change Password">
+</form>

@@ -1,0 +1,71 @@
+<%- include('../partials/header') %>
+
+<main class="container">
+  <h1><%= title %></h1>
+
+  <% if (messages && messages.length) { %>
+    <div class="flash">
+      <% messages.forEach(m => { %><p><%= m %></p><% }) %>
+    </div>
+  <% } %>
+
+  <% if (errors && errors.length) { %>
+    <div class="errors">
+      <ul>
+        <% errors.forEach(e => { %><li><%= e.msg %></li><% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <!-- FORM 1: Atualizar dados -->
+  <section class="card">
+    <h2>Account Update</h2>
+    <form method="post" action="/account/update" novalidate>
+      <input type="hidden" name="account_id" value="<%= account.account_id %>" />
+
+      <div class="field">
+        <label for="fn">Nome</label>
+        <input id="fn" name="account_firstname" type="text" required
+               value="<%= account.account_firstname || '' %>" />
+      </div>
+
+      <div class="field">
+        <label for="ln">Sobrenome</label>
+        <input id="ln" name="account_lastname" type="text" required
+               value="<%= account.account_lastname || '' %>" />
+      </div>
+
+      <div class="field">
+        <label for="em">Email</label>
+        <input id="em" name="account_email" type="email" required
+               value="<%= account.account_email || '' %>" />
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="button primary">Salvar alterações</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- FORM 2: Trocar senha -->
+  <section class="card">
+    <h2>Change Password</h2>
+    <p>Ao informar uma nova senha, a atual será substituída.
+       Requisitos: 12+ caracteres, com maiúscula, minúscula, número e símbolo.</p>
+
+    <form method="post" action="/account/change-password" novalidate>
+      <input type="hidden" name="account_id" value="<%= account.account_id %>" />
+
+      <div class="field">
+        <label for="pw">Nova senha</label>
+        <input id="pw" name="account_password" type="password" autocomplete="new-password" required />
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="button">Atualizar senha</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

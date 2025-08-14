@@ -1,0 +1,29 @@
+<%- include('../partials/header') %>
+
+<main class="container">
+  <h1><%= title %></h1>
+
+  <% if (messages && messages.length) { %>
+    <div class="flash">
+      <% messages.forEach(m => { %><p><%= m %></p><% }) %>
+    </div>
+  <% } %>
+
+  <!-- Saudação conforme o tipo -->
+  <h2>
+    Bem-vindo <%= account.account_firstname %>
+  </h2>
+
+  <!-- Link de atualizar conta (sempre visível) -->
+  <p>
+    <a class="button" href="/account/update/<%= account.account_id %>">Atualizar informações da conta</a>
+  </p>
+
+  <!-- Se Employee/Admin, mostra a seção de gestão de inventário -->
+  <% if (locals.user && (locals.user.account_type === 'Employee' || locals.user.account_type === 'Admin')) { %>
+    <h3>Inventory Management</h3>
+    <p><a href="/inventory/manage">Acessar gerenciamento de inventário</a></p>
+  <% } %>
+</main>
+
+<%- include('../partials/footer') %>
