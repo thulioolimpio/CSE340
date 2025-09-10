@@ -1,6 +1,483 @@
-/******* Change Box Model ***************/
+
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+/* Reset e estilos base */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary-color: #1a5276;
+    --secondary-color: #2e86c1;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --dark-color: #2c3e50;
+    --text-color: #333;
+    --background-color: #fff;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-image: url(../images/site/small_check.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Container principal com borda circular */
+#wrapper {
+    width: 70%;
+    max-width: 900px;
+    background-color: var(--light-color);
+    border: 3px solid var(--secondary-color);
+    border-radius: 25px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    padding: 15px;
+}
+
+.container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Header */
+.main-header {
+    background-color: white;
+    color: #2c3e50;
+    padding: 10px;
+    
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.logo img {
+    height: 40px;
+}
+
+.logo h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+}
+
+.header-contact p {
+    font-size: 0.8rem;
+}
+
+/* Navigation */
+.main-nav {
+    background-color: var(--dark-color);
+    padding: 0.4rem 0;
+    margin: 10px 0;
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    gap: 4rem;
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 0.3rem 0;
+    transition: opacity 0.3s;
+    font-size: 0.9rem;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active {
+    opacity: 0.8;
+    border-bottom: 2px solid white;
+}
+
+/* Hero Section */
+.hero {
+    background: white url("../images/vehicles/delorean.jpg") no-repeat center center;
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+    color: #1a5276;
+    text-align: center;
+    padding: 2.5rem 1rem;
+    margin: 10px 0;
+    height: 30%;
+    display: flex;
+}
+
+.hero-content h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.7rem;
+}
+
+.hero-content p {
+    font-size: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background-image: url(../images/site/own_today.png);
+    background-position: center;
+    background-size: 300px auto; /* largura fixa da imagem */
+    background-repeat: no-repeat; /* evita repetir a imagem */
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+
+    /* controla o tamanho do botão */
+    width: 300px;
+    height: 80px; /* ajuste conforme sua imagem */
+    line-height: 80px; /* centraliza o texto verticalmente */
+    text-align: start; /* centraliza horizontalmente */
+
+    align-self: flex-start;
+}
+
+
+.cta-button:hover {
+    background-color: #c0392b;
+}
+
+/* Featured Vehicles */
+.featured-vehicles {
+    padding: 2rem 0.8rem;
+    border-radius: 15px;
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    display: flex;
+    align-content: center;
+    justify-content: space-between;
+    flex-direction: row;
+    height: 30%;
+}
+
+.featured-vehicles h2,
+.services h2,
+.testimonials h2 {
+    text-align: center;
+    margin-bottom: 1.3rem;
+    font-family: 'Roboto', sans-serif;
+    color: black;
+    font-size: 1.6rem;
+}
+
+.vehicle-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.vehicle-card {
+    background-color: var(--background-color);
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    gap: 1rem; /* espaço entre os itens */
+    width: 80%;
+}
+
+.vehicle-card:hover {
+    transform: translateY(-3px);
+}
+
+
+
+.box {
+  background: #01B0D3;
+  padding: 0.5rem;
+  text-align: center;
+  border: 1px solid #ccc;
+  height: 200px;
+  
+}
+
+.box img {
+  width: 50%;
+  height: 150px;
+  object-fit: contain;
+  
+}
+
+.box a {
+  display: inline-block;
+ 
+  padding: 0.4rem 1rem;
+  color: blue;
+  text-decoration: none;
+  transition:  0.3s;
+}
+
+
+#listinha li{
+
+    line-height: 1.5rem;
+    margin-top: 2rem;
+    font-weight: bolder;
+    color: black;
+}
+
+
+/******* Media Queries ***************/
+
+/* Tablets (768px a 1024px) */
+@media screen and (max-width: 1024px) {
+  #wrapper {
+    width: 100%;
+    
+  }
+  main h1 { 
+    font-size: 1.3rem;
+  }
+
+ 
+
+  .hero {
+    background-size: cover;
+    padding: 2rem 1rem;
+  }
+   .hero-content h1 {
+    font-size: 1.3rem;
+  }
+
+
+  .featured-vehicles {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .vehicle-card {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .cta-button {
+    width: 250px;
+    height: 70px;
+    line-height: 70px;
+    background-size: 250px auto;
+  }
+}
+
+/* Tablets menores e mobile landscape (576px a 767px) */
+@media screen and (max-width: 767px) {
+  
+    body{
+        background-color: white;
+        background-image: none;
+    }
+  
+    #wrapper {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    
+  }
+
+  .main-header .container {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .nav-menu {
+    display: flex;
+    list-style: none;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    
+}
+
+
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    background-size: 250px;
+   
+  }
+
+  .hero-content h1 {
+    font-size: 1rem;
+  }
+  
+
+  .cta-button {
+    align-self: flex-start;
+    margin-top: 1rem;
+  }
+
+  .vehicle-grid {
+    align-items: center;
+  }
+
+  .vehicle-card {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .box {
+    height: 180px;
+  }
+}
+
+/* Mobile (até 575px) */
+@media screen and (max-width: 575px) {
+  body {
+    padding: 10px;
+  }
+
+  #wrapper {
+    width: 100%;
+    
+  }
+
+  .logo h1 {
+    font-size: 1.3rem;
+  }
+
+  .header-contact p {
+    font-size: 0.7rem;
+  }
+
+  /* Menu mobile */
+  .menu-toggle {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    z-index: 1000;
+  }
+
+
+  .hero {
+    height: auto;
+    min-height: 200px;
+  }
+
+  .hero-content h1 {
+    font-size: 1.3rem;
+  }
+
+  .hero-content p {
+    font-size: 0.9rem;
+  }
+
+  .cta-button {
+    width: 200px;
+    height: 60px;
+    line-height: 60px;
+    background-size: 200px auto;
+    font-size: 0.8rem;
+  }
+
+  .featured-vehicles h2,
+  .services h2,
+  .testimonials h2 {
+    font-size: 1.3rem;
+  }
+
+  .box {
+    height: 160px;
+    padding: 0.3rem;
+  }
+
+  .box img {
+    height: 120px;
+  }
+
+  #listinha li {
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+    margin-top: 1.5rem;
+  }
+}
+
+/* Telas muito pequenas (até 320px) */
+@media screen and (max-width: 320px) {
+    
+    #wrapper {
+    width: 100%;
+    border: none;
+    
+  }
+
+  
+  
+    .logo h1 {
+    font-size: 1.1rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.1rem;
+  }
+
+  .cta-button {
+    width: 180px;
+    height: 50px;
+    line-height: 50px;
+    background-size: 180px auto;
+  }
+
+  .box {
+    height: 140px;
+  }
+
+  .box img {
+    height: 100px;
+  }
+}
+
+/* Telas grandes (acima de 1200px) */
+@media screen and (min-width: 1200px) {
+  #wrapper {
+    max-width: 1100px;
+  }
+  
+  .container {
+    max-width: 1100px;
+  }
 }
