@@ -1,4 +1,3 @@
-
 *,
 *:before,
 *:after {
@@ -17,18 +16,19 @@
     --accent-color: #e74c3c;
     --light-color: #ecf0f1;
     --dark-color: #2c3e50;
-    --text-color: #333;
-    --background-color: #fff;
+    --text-color: #333333;
+    --background-color: #ffffff;
+    --button-color: #0056b3;
+    --button-hover: #003d82;
 }
 
 body {
     font-family: 'Open Sans', sans-serif;
     line-height: 1.6;
     color: var(--text-color);
+    background-color: #f5f5f5;
     background-image: url(../images/site/small_check.jpg);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    background-repeat: repeat;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -59,7 +59,6 @@ body {
     background-color: white;
     color: #2c3e50;
     padding: 10px;
-    
 }
 
 .main-header .container {
@@ -82,13 +81,15 @@ body {
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 1.6rem;
+    color: #000000;
 }
 
 .header-contact p {
     font-size: 0.8rem;
+    color: #000000;
 }
 
-/* Navigation */
+/* Navigation - ESTILO ORIGINAL PARA DESKTOP */
 .main-nav {
     background-color: var(--dark-color);
     padding: 0.4rem 0;
@@ -96,12 +97,7 @@ body {
 }
 
 .menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.3rem;
-    cursor: pointer;
+    display: none; /* Sempre escondido */
 }
 
 .nav-menu {
@@ -109,6 +105,8 @@ body {
     list-style: none;
     justify-content: center;
     gap: 4rem;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-menu a {
@@ -128,53 +126,78 @@ body {
 
 /* Hero Section */
 .hero {
-    background: white url("../images/vehicles/delorean.jpg") no-repeat center center;
+    background: white url("../images/vehicles/delorean.jpg") no-repeat center right;
     background-size: contain;
-    background-position: right;
-    background-repeat: no-repeat;
-    color: #1a5276;
-    text-align: center;
+    color: #000000;
+    text-align: left;
     padding: 2.5rem 1rem;
     margin: 10px 0;
     height: 30%;
     display: flex;
+    align-items: center;
 }
 
-.hero-content h1 {
+.hero-content {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 50%;
+}
+
+.hero-content h2 {
     font-family: 'Roboto', sans-serif;
     font-size: 1.8rem;
     margin-bottom: 0.7rem;
+    color: #000000;
 }
 
 .hero-content p {
     font-size: 1rem;
     margin-bottom: 1.2rem;
+    color: #000000;
+    font-weight: 500;
 }
 
+/* Botão com imagem */
 .cta-button {
     display: inline-block;
     background-image: url(../images/site/own_today.png);
     background-position: center;
-    background-size: 300px auto; /* largura fixa da imagem */
-    background-repeat: no-repeat; /* evita repetir a imagem */
-    color: white;
+    background-size: contain;
+    background-repeat: no-repeat;
+    color: transparent !important;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
-    transition: background-color 0.3s;
-
-    /* controla o tamanho do botão */
+    transition: opacity 0.3s;
     width: 300px;
-    height: 80px; /* ajuste conforme sua imagem */
-    line-height: 80px; /* centraliza o texto verticalmente */
-    text-align: start; /* centraliza horizontalmente */
-
-    align-self: flex-start;
+    height: 80px;
+    text-align: center;
+    position: relative;
+    border: none;
+    cursor: pointer;
 }
 
+.cta-button::before {
+    content: "Own Today - Learn More About DMC Delorean";
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
 
 .cta-button:hover {
-    background-color: #c0392b;
+    opacity: 0.9;
+}
+
+.cta-button:focus {
+    outline: 3px solid #0056b3;
+    outline-offset: 2px;
 }
 
 /* Featured Vehicles */
@@ -184,25 +207,24 @@ body {
     background-color: #f9f9f9;
     margin: 10px 0;
     display: flex;
-    align-content: center;
     justify-content: space-between;
     flex-direction: row;
-    height: 30%;
+    height: auto;
 }
 
 .featured-vehicles h2,
-.services h2,
-.testimonials h2 {
+#review h2 {
     text-align: center;
     margin-bottom: 1.3rem;
     font-family: 'Roboto', sans-serif;
-    color: black;
+    color: #000000;
     font-size: 1.6rem;
 }
 
 .vehicle-grid {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
+    width: 55%;
 }
 
 .vehicle-card {
@@ -211,273 +233,260 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
-    gap: 1rem; /* espaço entre os itens */
-    width: 80%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    width: 100%;
 }
 
 .vehicle-card:hover {
     transform: translateY(-3px);
 }
 
-
-
 .box {
-  background: #01B0D3;
-  padding: 0.5rem;
-  text-align: center;
-  border: 1px solid #ccc;
-  height: 200px;
-  
+    background: #e8f4f8;
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid #ddd;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 4px;
 }
 
 .box img {
-  width: 50%;
-  height: 150px;
-  object-fit: contain;
-  
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
 }
 
 .box a {
-  display: inline-block;
- 
-  padding: 0.4rem 1rem;
-  color: blue;
-  text-decoration: none;
-  transition:  0.3s;
-}
-
-
-#listinha li{
-
-    line-height: 1.5rem;
-    margin-top: 2rem;
-    font-weight: bolder;
-    color: black;
-}
-
-
-/******* Media Queries ***************/
-
-/* Tablets (768px a 1024px) */
-@media screen and (max-width: 1024px) {
-  #wrapper {
-    width: 100%;
-    
-  }
-  main h1 { 
-    font-size: 1.3rem;
-  }
-
- 
-
-  .hero {
-    background-size: cover;
-    padding: 2rem 1rem;
-  }
-   .hero-content h1 {
-    font-size: 1.3rem;
-  }
-
-
-  .featured-vehicles {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .vehicle-card {
-    width: 90%;
-    margin: 0 auto;
-  }
-
-  .cta-button {
-    width: 250px;
-    height: 70px;
-    line-height: 70px;
-    background-size: 250px auto;
-  }
-}
-
-/* Tablets menores e mobile landscape (576px a 767px) */
-@media screen and (max-width: 767px) {
-  
-    body{
-        background-color: white;
-        background-image: none;
-    }
-  
-    #wrapper {
-    width: 100%;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    box-shadow: none;
-    
-  }
-
-  .main-header .container {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
-  }
-
-  .nav-menu {
-    display: flex;
-    list-style: none;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    
-}
-
-
-
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 1.5rem 1rem;
-    background-size: 250px;
-   
-  }
-
-  .hero-content h1 {
-    font-size: 1rem;
-  }
-  
-
-  .cta-button {
-    align-self: flex-start;
-    margin-top: 1rem;
-  }
-
-  .vehicle-grid {
-    align-items: center;
-  }
-
-  .vehicle-card {
-    grid-template-columns: 1fr;
-    width: 100%;
-  }
-
-  .box {
-    height: 180px;
-  }
-}
-
-/* Mobile (até 575px) */
-@media screen and (max-width: 575px) {
-  body {
-    padding: 10px;
-  }
-
-  #wrapper {
-    width: 100%;
-    
-  }
-
-  .logo h1 {
-    font-size: 1.3rem;
-  }
-
-  .header-contact p {
-    font-size: 0.7rem;
-  }
-
-  /* Menu mobile */
-  .menu-toggle {
     display: block;
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    z-index: 1000;
-  }
-
-
-  .hero {
-    height: auto;
-    min-height: 200px;
-  }
-
-  .hero-content h1 {
-    font-size: 1.3rem;
-  }
-
-  .hero-content p {
-    font-size: 0.9rem;
-  }
-
-  .cta-button {
-    width: 200px;
-    height: 60px;
-    line-height: 60px;
-    background-size: 200px auto;
-    font-size: 0.8rem;
-  }
-
-  .featured-vehicles h2,
-  .services h2,
-  .testimonials h2 {
-    font-size: 1.3rem;
-  }
-
-  .box {
-    height: 160px;
-    padding: 0.3rem;
-  }
-
-  .box img {
-    height: 120px;
-  }
-
-  #listinha li {
-    font-size: 0.9rem;
-    line-height: 1.3rem;
-    margin-top: 1.5rem;
-  }
+    padding: 0.4rem 1rem;
+    color: #0056b3;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+    background-color: #f0f0f0;
+    border-radius: 3px;
 }
 
-/* Telas muito pequenas (até 320px) */
-@media screen and (max-width: 320px) {
+.box a:hover {
+    color: #003366;
+    background-color: #e0e0e0;
+}
+
+/* Reviews Section */
+#review {
+    width: 40%;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+#review h2 {
+    color: #000000;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+#listinha {
+    list-style: none;
+}
+
+#listinha li {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    color: #000000;
+    font-weight: 500;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: var(--dark-color);
+    color: white;
+    margin-top: 1rem;
+    border-radius: 8px;
+}
+
+.copyright {
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+/******* MEDIA QUERIES - APENAS PARA MOBILE ***************/
+
+/* Tablets (768px a 1024px) - Mantém estilo desktop */
+@media screen and (max-width: 1024px) {
+    #wrapper {
+        width: 90%;
+    }
+    
+    .hero-content {
+        max-width: 60%;
+    }
+    
+    .nav-menu {
+        gap: 2rem;
+    }
+    
+    .featured-vehicles {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .vehicle-grid,
+    #review {
+        width: 100%;
+    }
+    
+    .cta-button {
+        width: 250px;
+        height: 70px;
+    }
+}
+
+/* Mobile (767px para baixo) */
+@media screen and (max-width: 767px) {
+    body {
+        padding: 10px;
+        background-image: none;
+        background-color: white;
+    }
     
     #wrapper {
-    width: 100%;
-    border: none;
+        width: 100%;
+        border: none;
+        border-radius: 0;
+        padding: 10px;
+        box-shadow: none;
+    }
     
-  }
-
-  
-  
-    .logo h1 {
-    font-size: 1.1rem;
-  }
-
-  .hero-content h1 {
-    font-size: 1.1rem;
-  }
-
-  .cta-button {
-    width: 180px;
-    height: 50px;
-    line-height: 50px;
-    background-size: 180px auto;
-  }
-
-  .box {
-    height: 140px;
-  }
-
-  .box img {
-    height: 100px;
-  }
+    /* MENU MOBILE - Vertical e centralizado */
+    .nav-menu {
+        flex-direction: column;
+        gap: 0.8rem;
+        text-align: center;
+    }
+    
+    .nav-menu li {
+        width: 100%;
+    }
+    
+    .nav-menu a {
+        display: block;
+        padding: 0.8rem;
+        font-size: 1rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .nav-menu a:hover,
+    .nav-menu a.active {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-bottom: 2px solid white;
+    }
+    
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        background-position: center;
+        background-size: cover;
+        padding: 1.5rem;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+        text-align: center;
+    }
+    
+    .vehicle-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-button {
+        width: 200px;
+        height: 60px;
+        margin: 0 auto;
+        display: block;
+    }
 }
 
-/* Telas grandes (acima de 1200px) */
+/* Mobile pequeno (575px para baixo) */
+@media screen and (max-width: 575px) {
+    .main-header .container {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .logo h1 {
+        font-size: 1.4rem;
+    }
+    
+    .hero-content h2 {
+        font-size: 1.4rem;
+    }
+    
+    .nav-menu a {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+    
+    .cta-button {
+        width: 180px;
+        height: 50px;
+    }
+    
+    .box {
+        height: 180px;
+    }
+    
+    .box img {
+        height: 100px;
+    }
+}
+
+/* Mobile muito pequeno (320px para baixo) */
+@media screen and (max-width: 320px) {
+    .nav-menu a {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+    
+    .logo h1 {
+        font-size: 1.2rem;
+    }
+    
+    .hero-content h2 {
+        font-size: 1.2rem;
+    }
+    
+    .cta-button {
+        width: 160px;
+        height: 45px;
+    }
+    
+    .box {
+        height: 160px;
+    }
+    
+    .box img {
+        height: 90px;
+    }
+}
+
+/* Telas grandes (acima de 1200px) - Mantém estilo original */
 @media screen and (min-width: 1200px) {
-  #wrapper {
-    max-width: 1100px;
-  }
-  
-  .container {
-    max-width: 1100px;
-  }
+    #wrapper {
+        max-width: 1100px;
+    }
 }
