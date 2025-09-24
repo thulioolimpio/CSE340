@@ -290,7 +290,55 @@ body {
     margin-bottom: 1rem;
     text-align: left;
 }
+/* Inventory Display Styles */
+#inv-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    list-style: none;
+    padding: 0;
+}
 
+#inv-display li {
+    background: white;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+#inv-display img {
+    max-width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.namePrice h2 {
+    margin: 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.namePrice h2 a {
+    color: var(--dark-color);
+    text-decoration: none;
+}
+
+.namePrice h2 a:hover {
+    color: var(--secondary-color);
+}
+
+.namePrice span {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.notice {
+    text-align: center;
+    padding: 2rem;
+    font-style: italic;
+    color: #666;
+}
 #listinha {
     list-style: none;
 }
