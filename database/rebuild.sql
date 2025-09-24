@@ -1,10 +1,13 @@
--- CRIAÇÃO DO ENUM
+-- PRIMEIRO DROPA AS TABELAS (se existirem)
+DROP TABLE IF EXISTS account, inventory, classification CASCADE;
+
+-- AGORA DROPA O ENUM (só vai funcionar porque a tabela account já foi dropada)
 DROP TYPE IF EXISTS account_type_enum;
+
+-- CRIAÇÃO DO ENUM
 CREATE TYPE account_type_enum AS ENUM ('Client', 'Admin');
 
 -- CRIAÇÃO DAS TABELAS
-DROP TABLE IF EXISTS account, inventory, classification;
-
 CREATE TABLE classification (
     classification_id SERIAL PRIMARY KEY,
     classification_name VARCHAR(255) UNIQUE NOT NULL
