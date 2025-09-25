@@ -1,41 +1,37 @@
 const { Pool } = require("pg")
-require("dotenv").config()
 
-/* ***************
- * Connection Pool
- * SSL Object needed for both local AND production environments
- * Render PostgreSQL requires SSL
- * *************** */
 let pool
 
-if (process.env.NODE_ENV == "development") {
+console.log("=== Database Connection ===")
+console.log("NODE_ENV:", process.env.NODE_ENV)
+console.log("DATABASE_URL:", process.env.DATABASE_URL ? "Existe" : "Não existe")
+
+try {
   pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
   })
-} else {
-  // PRODUÇÃO (Render) - também precisa de SSL
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false, // ESSENCIAL para Render
-    },
+
+  pool.on('connect', () => {
+    console.log('✅ Conectado ao PostgreSQL')
   })
+
+  pool.on('error', (err) => {
+    console.error('❌ Erro na pool:', err)
+  })
+
+} catch (error) {
+  console.error('❌ Erro ao criar pool:', error)
 }
 
-// Mova a exportação para fora do if-else
 module.exports = {
   async query(text, params) {
     try {
       const res = await pool.query(text, params)
-      if (process.env.NODE_ENV == "development") {
-        console.log("executed query", { text })
-      }
+      console.log("✅ Query executada com sucesso")
       return res
     } catch (error) {
-      console.error("error in query", { text })
+      console.error("❌ Erro na query:", error.message)
       throw error
     }
   },
