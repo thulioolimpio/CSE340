@@ -1,28 +1,29 @@
 const { Pool } = require("pg")
 
-let pool
-
 console.log("=== Database Connection ===")
 console.log("NODE_ENV:", process.env.NODE_ENV)
-console.log("DATABASE_URL:", process.env.DATABASE_URL ? "Existe" : "Não existe")
 
-try {
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
-  })
+// Configuração CORRETA para Render
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false  // ← ISSO É OBRIGATÓRIO PARA RENDER
+  }
+})
 
-  pool.on('connect', () => {
-    console.log('✅ Conectado ao PostgreSQL')
-  })
+// Teste de conexão
+pool.on('connect', () => {
+  console.log('✅ Conectado ao PostgreSQL')
+})
 
-  pool.on('error', (err) => {
-    console.error('❌ Erro na pool:', err)
-  })
+pool.on('error', (err) => {
+  console.error('❌ Erro na pool:', err)
+})
 
-} catch (error) {
-  console.error('❌ Erro ao criar pool:', error)
-}
+// Teste inicial
+pool.query('SELECT NOW()')
+  .then(() => console.log('✅ Teste de conexão bem-sucedido'))
+  .catch(err => console.error('❌ Teste de conexão falhou:', err.message))
 
 module.exports = {
   async query(text, params) {
