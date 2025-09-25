@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <style>
+    .detail-container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+    .vehicle-detail { display: grid; grid-template-columns: 1fr; gap: 1rem; align-items: start; }
+    .vehicle-image img { width: 100%; height: auto; display: block; border-radius: 6px; }
+    .vehicle-info h1 { margin: 0 0 0.5rem 0; font-size: 1.5rem; }
+    .specs { margin: 0.5rem 0; font-weight: 600; }
+    .details-list { list-style: none; padding: 0; margin: 0.5rem 0; }
+    @media (min-width: 900px) {
+      .vehicle-detail { grid-template-columns: 1fr 1fr; }
+      .vehicle-image { max-width: 600px; }
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/header') %>
+
+  <main class="detail-container" role="main">
+    <%- detail %>
+  </main>
+
+ 
+</body>
+</html>

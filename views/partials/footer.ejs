@@ -1,5 +1,12 @@
 <% const d = new Date()
-let year = d.getFullYear() %>
+   let year = d.getFullYear() %>
+
 <footer>
+  <nav class="footer-nav">
+    <ul>
+      <!-- Link para testar erro 500 intencional -->
+      <li><a href="/inv/error" title="Trigger a 500 error (test)">Trigger 500 Error</a></li>
+    </ul>
+  </nav>
   <p class="copyright"><%= year %>, CSE 340 App</p>
 </footer>
