@@ -1,65 +1,90 @@
-const pool = require("../database")
+const pool = require("../database") // seu arquivo de conexão
+
+const invModel = {}
 
 /* ***************************
- *  Get all classification data
+ * Add new classification
  * ************************** */
-async function getClassifications() {
+invModel.addClassification = async function (classification_name) {
   try {
-    const data = await pool.query(
-      "SELECT * FROM public.classification ORDER BY classification_name"
-    )
-    return data.rows
+    const sql = "INSERT INTO classification (classification_name) VALUES ($1) RETURNING *"
+    const values = [classification_name]
+    const result = await pool.query(sql, values)
+    return result.rows[0] // retorna a classificação inserida
   } catch (error) {
-    console.error("getClassifications error:", error)
-    return []
-  }
-}
-
-/* ***************************
- *  Get all inventory items and classification_name by classification_id
- * ************************** */
-async function getInventoryByClassificationId(classification_id) {
-  try {
-    const data = await pool.query(
-      `SELECT i.*, c.classification_name
-       FROM public.inventory AS i
-       JOIN public.classification AS c
-         ON i.classification_id = c.classification_id
-       WHERE i.classification_id = $1
-       ORDER BY i.inv_make, i.inv_model`,
-      [classification_id]
-    )
-    return data.rows
-  } catch (error) {
-    console.error("getInventoryByClassificationId error:", error)
-    return []
-  }
-}
-
-/* ***************************
- *  Get a single inventory item by inv_id
- * ************************** */
-async function getInventoryById(invId) {
-  try {
-    const data = await pool.query(
-      `SELECT i.*, c.classification_name
-       FROM public.inventory AS i
-       LEFT JOIN public.classification AS c
-         ON i.classification_id = c.classification_id
-       WHERE i.inv_id = $1
-       LIMIT 1`,
-      [invId]
-    )
-    if (!data.rows || data.rows.length === 0) return null
-    return data.rows[0]
-  } catch (error) {
-    console.error("getInventoryById error:", error)
+    console.error("Error in addClassification:", error)
     return null
   }
 }
 
-module.exports = {
-  getClassifications,
-  getInventoryByClassificationId,
-  getInventoryById
+/* ***************************
+ * Add new inventory item
+ * ************************** */
+invModel.addInventory = async function (vehicle) {
+  try {
+    const sql = `INSERT INTO inventory 
+      (inv_make, inv_model, inv_year, inv_description, inv_price, inv_miles, inv_image, inv_thumbnail, classification_id)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      RETURNING *`
+    const values = [
+      vehicle.inv_make,
+      vehicle.inv_model,
+      vehicle.inv_year,
+      vehicle.inv_description,
+      vehicle.inv_price,
+      vehicle.inv_miles,
+      vehicle.inv_image,
+      vehicle.inv_thumbnail,
+      vehicle.classification_id,
+    ]
+    const result = await pool.query(sql, values)
+    return result.rows[0]
+  } catch (error) {
+    console.error("Error in addInventory:", error)
+    return null
+  }
 }
+
+/* ***************************
+ * Get all classifications
+ * ************************** */
+invModel.getClassifications = async function () {
+  try {
+    const sql = "SELECT * FROM classification ORDER BY classification_name ASC"
+    const result = await pool.query(sql)
+    return result
+  } catch (error) {
+    console.error("Error in getClassifications:", error)
+    return null
+  }
+}
+
+/* ***************************
+ * Get inventory by classification id
+ * ************************** */
+invModel.getInventoryByClassificationId = async function (classification_id) {
+  try {
+    const sql = "SELECT * FROM inventory WHERE classification_id = $1"
+    const result = await pool.query(sql, [classification_id])
+    return result.rows
+  } catch (error) {
+    console.error("Error in getInventoryByClassificationId:", error)
+    return []
+  }
+}
+
+/* ***************************
+ * Get inventory by id
+ * ************************** */
+invModel.getInventoryById = async function (inv_id) {
+  try {
+    const sql = "SELECT * FROM inventory WHERE inv_id = $1"
+    const result = await pool.query(sql, [inv_id])
+    return result.rows[0]
+  } catch (error) {
+    console.error("Error in getInventoryById:", error)
+    return null
+  }
+}
+
+module.exports = invModel

@@ -10,7 +10,7 @@ Util.getNav = async function () {
     let list = '<ul class="nav-menu">'
     list += '<li><a href="/" class="nav-link" title="Home page">Home</a></li>'
 
-    data.forEach((row) => {
+    data.rows.forEach((row) => {
       list += `<li><a href="/inv/type/${row.classification_id}" class="nav-link" title="See our inventory of ${row.classification_name} vehicles">${row.classification_name}</a></li>`
     })
 
@@ -53,7 +53,11 @@ Util.buildClassificationGrid = async function (data) {
  * Helpers for formatting
  * **********************/
 Util.formatUSD = function (value) {
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(value)
+  return new Intl.NumberFormat("en-US", { 
+    style: "currency", 
+    currency: "USD", 
+    maximumFractionDigits: 0 
+  }).format(value)
 }
 
 Util.formatNumber = function (value) {
@@ -62,8 +66,7 @@ Util.formatNumber = function (value) {
 
 /* **************************************
  * Build a vehicle detail HTML string
- * (Task 1 requirement: utility that wraps the vehicle info in HTML)
- * ************************************ */
+ ************************************ */
 Util.buildVehicleDetailHTML = function (vehicle) {
   if (!vehicle) return '<p class="notice">No vehicle information available.</p>'
 
@@ -93,10 +96,29 @@ Util.buildVehicleDetailHTML = function (vehicle) {
 }
 
 /* ****************************************
- * Middleware For Handling Errors
- * Wrap other function in this for 
- * General Error Handling
+ * Build classification select list for forms
  **************************************** */
-Util.handleErrors = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next)
+Util.buildClassificationList = async function (selectedId = null) {
+  const data = await invModel.getClassifications()
+  let list = '<select name="classification_id" id="classificationList" required>'
+  list += '<option value="">Choose a Classification</option>'
+
+  data.rows.forEach((row) => {
+    list += `<option value="${row.classification_id}"${row.classification_id == selectedId ? " selected" : ""}>${row.classification_name}</option>`
+  })
+
+  list += "</select>"
+  return list
+}
+
+/* ****************************************
+ * Middleware For Handling Errors
+ * Wraps other functions in try/catch
+ **************************************** */
+Util.handleErrors = (fn) => {
+  return function (req, res, next) {
+    Promise.resolve(fn(req, res, next)).catch(next)
+  }
+}
 
 module.exports = Util

@@ -1,0 +1,36 @@
+<main class="form-container">
+  <% if (typeof title !== 'undefined') { %>
+    <h1><%= title %></h1>
+  <% } else { %>
+    <h1>Add New Classification</h1>
+  <% } %>
+
+  <% if (typeof errors !== 'undefined' && errors && errors.array) { %>
+    <ul class="errors">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (typeof message !== 'undefined' && message) { %>
+    <p class="success"><%= message %></p>
+  <% } %>
+
+  <form action="/inv/add-classification" method="POST" class="login-form">
+    <div class="form-group">
+      <label for="classification_name">Classification Name (no spaces or special characters):</label>
+      <input
+        type="text"
+        id="classification_name"
+        name="classification_name"
+        pattern="^[A-Za-z0-9]+$"
+        minlength="3"
+        required
+        value="<%= classification_name || '' %>"
+      />
+    </div>
+
+    <button type="submit" class="btn">Add Classification</button>
+  </form>
+</main>

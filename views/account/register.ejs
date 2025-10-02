@@ -1,0 +1,63 @@
+<main class="register-form-container">
+  <h1><%= title %></h1>
+
+  <!-- Flash messages -->
+  <% if (messages) { %>
+    <div class="flash-messages">
+      <%- messages() %>
+    </div>
+  <% } %>
+
+  <!-- Validation errors (server-side) -->
+  <% if (errors) { %>
+    <ul class="notice">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <!-- Registration Form -->
+  <form action="/account/register" method="post" class="register-form" id="registerForm">
+    <div class="form-group">
+      <label for="account_firstname">First Name</label>
+      <input type="text" id="account_firstname" name="account_firstname"
+             placeholder="Enter your first name"
+             required
+             value="<%= typeof account_firstname !== 'undefined' ? account_firstname : '' %>">
+    </div>
+
+    <div class="form-group">
+      <label for="account_lastname">Last Name</label>
+      <input type="text" id="account_lastname" name="account_lastname"
+             placeholder="Enter your last name"
+             required
+             value="<%= typeof account_lastname !== 'undefined' ? account_lastname : '' %>">
+    </div>
+
+    <div class="form-group">
+      <label for="account_email">Email Address</label>
+      <input type="email" id="account_email" name="account_email"
+             placeholder="Enter a valid email address"
+             required
+             value="<%= typeof account_email !== 'undefined' ? account_email : '' %>">
+    </div>
+
+    <div class="form-group">
+      <label for="account_password">Password</label>
+      <span class="password-hint">
+        Passwords must be at least 12 characters and contain at least
+        1 number, 1 capital letter, and 1 special character
+      </span>
+      <input type="password" id="account_password" name="account_password"
+             required
+             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+    </div>
+
+    <button type="submit" class="btn">Register</button>
+  </form>
+
+  <p class="register-link">
+    Already have an account? <a href="/account/login">Login here</a>.
+  </p>
+</main>

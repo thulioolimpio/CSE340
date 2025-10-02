@@ -1,0 +1,51 @@
+<main class="form-container">
+  <% if (typeof title !== 'undefined') { %>
+    <h1><%= title %></h1>
+  <% } %>
+
+  <!-- Flash messages -->
+  <% if ((typeof message !== 'undefined' && message) || (flash && (flash.success.length || flash.error.length || flash.info.length))) { %>
+    <section class="flash-messages" aria-live="polite">
+      <% if (typeof message !== 'undefined' && message) { %>
+        <div class="flash flash-success"><%= message %></div>
+      <% } %>
+
+      <% if (flash && flash.success.length) { %>
+        <% flash.success.forEach(msg => { %>
+          <div class="flash flash-success"><%= msg %></div>
+        <% }) %>
+      <% } %>
+      <% if (flash && flash.error.length) { %>
+        <% flash.error.forEach(msg => { %>
+          <div class="flash flash-error"><%= msg %></div>
+        <% }) %>
+      <% } %>
+      <% if (flash && flash.info.length) { %>
+        <% flash.info.forEach(msg => { %>
+          <div class="flash flash-info"><%= msg %></div>
+        <% }) %>
+      <% } %>
+    </section>
+  <% } %>
+
+  <nav class="management-links" aria-label="Inventory management tasks">
+    <ul>
+      <li><a href="/inv/add-classification" title="Add a new classification">Add Classification</a></li>
+      <li><a href="/inv/add-inventory" title="Add a new inventory item">Add Inventory Item</a></li>
+    </ul>
+  </nav>
+
+  <section class="management-help">
+    <p>Use the links above to add a new classification or add a new inventory item. Messages will appear here after actions are processed.</p>
+  </section>
+</main>
+
+<style>
+  /* Minimal styling */
+  .flash { padding: 0.5rem; margin-bottom: 0.5rem; border-radius: 4px; }
+  .flash-success { background: #e6ffed; border: 1px solid #8be28b; color: #155724; }
+  .flash-error { background: #ffe6e6; border: 1px solid #e08b8b; color: #721c24; }
+  .flash-info { background: #eef4ff; border: 1px solid #8baee2; color: #0c3e8c; }
+  .management-links ul { list-style: none; padding: 0; }
+  .management-links li { margin: 0.5rem 0; }
+</style>

@@ -6,7 +6,17 @@
 /* ***********************
  * Require Statements
  *************************/
+const express = require("express")
+const session = require("express-session")
+const pool = require('./database/')
+const accountRoute = require("./routes/accountRoute")
 const path = require('path')
+const expressLayouts = require("express-ejs-layouts")
+const static = require("./routes/static")
+const baseController = require("./controllers/baseController")
+const inventoryRoute = require("./routes/inventoryRoute")
+const utilities = require("./utilities/")
+const bodyParser = require("body-parser") // ✅ body-parser adicionado
 
 // Carregar dotenv com caminho absoluto
 require('dotenv').config({ path: path.join(__dirname, '.env') })
@@ -26,14 +36,6 @@ if (fs.existsSync(envPath)) {
 }
 console.log('================================')
 
-const express = require("express")
-const expressLayouts = require("express-ejs-layouts")
-const app = express()
-const static = require("./routes/static")
-const baseController = require("./controllers/baseController")
-const inventoryRoute = require("./routes/inventoryRoute")
-const utilities = require("./utilities/")
-
 // DEBUG: Verificar variáveis
 console.log("=== Variáveis de Ambiente ===")
 console.log("NODE_ENV:", process.env.NODE_ENV)
@@ -41,6 +43,32 @@ console.log("PORT:", process.env.PORT)
 console.log("DATABASE_URL:", process.env.DATABASE_URL || "NÃO ENCONTRADA")
 console.log("==============================")
 
+const app = express()
+
+/* ***********************
+ * Middleware
+ *************************/
+app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
+
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
+
+// ✅ Body Parser para processar dados de formulário e JSON
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
 /* ***********************
  * View Engine and Templates
@@ -49,12 +77,38 @@ app.set("view engine", "ejs")
 app.use(expressLayouts)
 app.set("layout", "./layouts/layout")
 
-
 /* ***********************
  * Routes
  *************************/
 app.use(static)
 app.use(express.static(path.join(__dirname, 'public')))
+app.use("/account", accountRoute)
+
+// session + flash (needed for flash messages)
+const flash = require('connect-flash')
+
+// configure session
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'change_this_on_deploy',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 1000 * 60 * 60 } // 1 hour
+  })
+)
+// initialize flash
+app.use(flash())
+
+// Make flash messages available to all views via res.locals
+app.use((req, res, next) => {
+  res.locals.flash = {
+    success: req.flash('success'),
+    error: req.flash('error'),
+    info: req.flash('info')
+  }
+  next()
+})
+
 
 // Index route
 app.get("/", utilities.handleErrors(baseController.buildHome))
@@ -66,7 +120,6 @@ app.use("/inv", inventoryRoute)
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
-
 
 /* ***********************
  * Express Error Handler
@@ -88,13 +141,11 @@ app.use(async (err, req, res, next) => {
   })
 })
 
-
 /* ***********************
  * Local Server Information
  *************************/
 const port = process.env.PORT || 5500
 const host = process.env.HOST || "localhost"
-
 
 /* ***********************
  * Start Server

@@ -1,0 +1,73 @@
+<main class="form-container">
+  <% if (typeof title !== 'undefined') { %>
+    <h1><%= title %></h1>
+  <% } else { %>
+    <h1>Add New Vehicle</h1>
+  <% } %>
+
+  <!-- Flash ou validação de mensagens -->
+  <% if (typeof errors !== 'undefined' && errors && errors.array) { %>
+    <ul class="errors">
+      <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+  <% } %>
+
+  <% if (typeof message !== 'undefined' && message) { %>
+    <p class="success"><%= message %></p>
+  <% } %>
+
+  <form action="/inv/add-inventory" method="POST" class="login-form">
+
+    <div class="form-group">
+      <label for="inv_make">Make:</label>
+      <input type="text" id="inv_make" name="inv_make" required value="<%= inv_make || '' %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_model">Model:</label>
+      <input type="text" id="inv_model" name="inv_model" required value="<%= inv_model || '' %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_year">Year:</label>
+      <input type="number" id="inv_year" name="inv_year" required value="<%= inv_year || '' %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_description">Description:</label>
+      <textarea id="inv_description" name="inv_description" required><%= inv_description || '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="inv_price">Price:</label>
+      <input type="number" step="0.01" id="inv_price" name="inv_price" required value="<%= inv_price || '' %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_miles">Miles:</label>
+      <input type="number" step="1" id="inv_miles" name="inv_miles" required value="<%= inv_miles || '' %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_thumbnail">Thumbnail Image Path:</label>
+      <input type="text" id="inv_thumbnail" name="inv_thumbnail" required value="<%= inv_thumbnail || '/images/no-image.png' %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="inv_image">Full Image Path:</label>
+      <input type="text" id="inv_image" name="inv_image" required value="<%= inv_image || '/images/no-image.png' %>" />
+    </div>
+
+    <div class="form-group">
+      <label for="classification_id">Classification:</label>
+      <select id="classification_id" name="classification_id" required class="form-control">
+        <option value="">Choose a Classification</option>
+        <%- classificationList %>
+      </select>
+    </div>
+
+    <button type="submit" class="btn">Add Vehicle</button>
+  </form>
+</main>
