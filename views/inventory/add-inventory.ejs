@@ -1,25 +1,31 @@
-<main class="form-container">
-  <% if (typeof title !== 'undefined') { %>
+<div class="form-container">
+  <% if (title) { %>
     <h1><%= title %></h1>
-  <% } else { %>
-    <h1>Add New Vehicle</h1>
   <% } %>
 
-  <!-- Flash ou validação de mensagens -->
-  <% if (typeof errors !== 'undefined' && errors && errors.array) { %>
-    <ul class="errors">
-      <% errors.array().forEach(error => { %>
-        <li><%= error.msg %></li>
-      <% }) %>
-    </ul>
+  <!-- Flash messages -->
+  <% if (flash && (flash.success.length || flash.error.length || flash.info.length)) { %>
+    <section class="flash-messages" aria-live="polite">
+      <% if (flash.success.length) { %>
+        <% flash.success.forEach(msg => { %>
+          <div class="flash flash-success"><%= msg %></div>
+        <% }) %>
+      <% } %>
+      <% if (flash.error.length) { %>
+        <% flash.error.forEach(msg => { %>
+          <div class="flash flash-error"><%= msg %></div>
+        <% }) %>
+      <% } %>
+      <% if (flash.info.length) { %>
+        <% flash.info.forEach(msg => { %>
+          <div class="flash flash-info"><%= msg %></div>
+        <% }) %>
+      <% } %>
+    </section>
   <% } %>
 
-  <% if (typeof message !== 'undefined' && message) { %>
-    <p class="success"><%= message %></p>
-  <% } %>
-
+  <!-- Formulário -->
   <form action="/inv/add-inventory" method="POST" class="login-form">
-
     <div class="form-group">
       <label for="inv_make">Make:</label>
       <input type="text" id="inv_make" name="inv_make" required value="<%= inv_make || '' %>" />
@@ -62,12 +68,12 @@
 
     <div class="form-group">
       <label for="classification_id">Classification:</label>
-      <select id="classification_id" name="classification_id" required class="form-control">
+      <select name="classification_id" id="classification_id" required>
         <option value="">Choose a Classification</option>
-        <%- classificationList %>
+        <%= classificationList %>
       </select>
     </div>
 
     <button type="submit" class="btn">Add Vehicle</button>
   </form>
-</main>
+</div>

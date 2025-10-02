@@ -1,36 +1,35 @@
-<main class="form-container">
-  <% if (typeof title !== 'undefined') { %>
+<div class="form-container">
+  <% if (title) { %>
     <h1><%= title %></h1>
-  <% } else { %>
-    <h1>Add New Classification</h1>
   <% } %>
 
-  <% if (typeof errors !== 'undefined' && errors && errors.array) { %>
-    <ul class="errors">
-      <% errors.array().forEach(error => { %>
-        <li><%= error.msg %></li>
-      <% }) %>
-    </ul>
+  <!-- Flash messages -->
+  <% if (flash && (flash.success.length || flash.error.length || flash.info.length)) { %>
+    <section class="flash-messages" aria-live="polite">
+      <% if (flash.success.length) { %>
+        <% flash.success.forEach(msg => { %>
+          <div class="flash flash-success"><%= msg %></div>
+        <% }) %>
+      <% } %>
+      <% if (flash.error.length) { %>
+        <% flash.error.forEach(msg => { %>
+          <div class="flash flash-error"><%= msg %></div>
+        <% }) %>
+      <% } %>
+      <% if (flash.info.length) { %>
+        <% flash.info.forEach(msg => { %>
+          <div class="flash flash-info"><%= msg %></div>
+        <% }) %>
+      <% } %>
+    </section>
   <% } %>
 
-  <% if (typeof message !== 'undefined' && message) { %>
-    <p class="success"><%= message %></p>
-  <% } %>
-
+  <!-- Formulário -->
   <form action="/inv/add-classification" method="POST" class="login-form">
     <div class="form-group">
-      <label for="classification_name">Classification Name (no spaces or special characters):</label>
-      <input
-        type="text"
-        id="classification_name"
-        name="classification_name"
-        pattern="^[A-Za-z0-9]+$"
-        minlength="3"
-        required
-        value="<%= classification_name || '' %>"
-      />
+      <label for="classification_name">Classification Name:</label>
+      <input type="text" id="classification_name" name="classification_name" required value="<%= classification_name || '' %>" />
     </div>
-
     <button type="submit" class="btn">Add Classification</button>
   </form>
-</main>
+</div>
