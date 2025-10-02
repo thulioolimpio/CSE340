@@ -363,6 +363,11 @@ footer {
     margin-top: 1rem;
     border-radius: 8px;
 }
+footer a{
+
+    color: white;
+   
+}
 
 .copyright {
     font-size: 0.9rem;
