@@ -1,40 +1,53 @@
 <div class="form-container">
-  <% if (title) { %>
-    <h1><%= title %></h1>
-  <% } %>
+    <% if (title) { %>
+        <h1><%= title %></h1>
+    <% } %>
 
-  <!-- Flash messages -->
-  <% if (flash && (flash.success.length || flash.error.length || flash.info.length)) { %>
-    <section class="flash-messages" aria-live="polite">
-      <% if (flash.success.length) { %>
-        <% flash.success.forEach(msg => { %>
-          <div class="flash flash-success"><%= msg %></div>
-        <% }) %>
-      <% } %>
-      <% if (flash.error.length) { %>
-        <% flash.error.forEach(msg => { %>
-          <div class="flash flash-error"><%= msg %></div>
-        <% }) %>
-      <% } %>
-      <% if (flash.info.length) { %>
-        <% flash.info.forEach(msg => { %>
-          <div class="flash flash-info"><%= msg %></div>
-        <% }) %>
-      <% } %>
+    <% if (flash && (flash.success.length || flash.error.length || flash.info.length)) { %>
+        <section class="flash-messages" aria-live="polite">
+            <% if (flash.success.length) { %>
+                <% flash.success.forEach(msg => { %>
+                    <div class="flash flash-success"><%= msg %></div>
+                <% }) %>
+            <% } %>
+            <% if (flash.error.length) { %>
+                <% flash.error.forEach(msg => { %>
+                    <div class="flash flash-error"><%= msg %></div>
+                <% }) %>
+            <% } %>
+            <% if (flash.info.length) { %>
+                <% flash.info.forEach(msg => { %>
+                    <div class="flash flash-info"><%= msg %></div>
+                <% }) %>
+            <% } %>
+        </section>
+    <% } %>
+
+    <% if (message) { %>
+        <div class="flash flash-notice"><%= message %></div>
+    <% } %>
+
+    <nav class="management-links" aria-label="Inventory management tasks">
+        <ul>
+            <li><a href="/inv/add-classification" title="Add a new classification">Add Classification</a></li>
+            <li><a href="/inv/add-inventory" title="Add a new inventory item">Add Inventory Item</a></li>
+        </ul>
+    </nav>
+
+    <h2>Manage Inventory</h2>
+
+    <p>Select a classification from the list to see the items belonging to the classification.</p>
+
+    <%- classificationSelect %>
+
+    <table id="inventoryDisplay"></table>
+
+    <noscript>JavaScript must be enabled to use this page.</noscript>
+
+    <section class="management-help">
+        <h2 class="sr-only">Help</h2>
+        <p>Use the links above to add a new classification or add a new inventory item. Messages will appear here after actions are processed.</p>
     </section>
-  <% } %>
-
-  <!-- Management links -->
-  <nav class="management-links" aria-label="Inventory management tasks">
-    <ul>
-      <li><a href="/inv/add-classification" title="Add a new classification">Add Classification</a></li>
-      <li><a href="/inv/add-inventory" title="Add a new inventory item">Add Inventory Item</a></li>
-    </ul>
-  </nav>
-
-  <!-- Help section -->
-  <section class="management-help">
-    <h2 class="sr-only">Help</h2>
-    <p>Use the links above to add a new classification or add a new inventory item. Messages will appear here after actions are processed.</p>
-  </section>
 </div>
+
+<script src="../../js/inventory.js"></script>

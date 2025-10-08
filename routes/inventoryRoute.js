@@ -3,9 +3,11 @@ const router = express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
 const invValidate = require("../utilities/inventory-validation")
+// NOVO: Importa o middleware de autorização de inventário
+const { checkEmployeeOrAdmin } = require("../utilities/inventory-middleware") 
 
 // ----------------------
-// Existing routes
+// Existing routes (Client Views - NÃO REQUER AUTORIZAÇÃO)
 // ----------------------
 // Build inventory by classification view
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId))
@@ -17,31 +19,70 @@ router.get("/detail/:invId", utilities.handleErrors(invController.buildDetail))
 router.get("/error", utilities.handleErrors(invController.triggerError))
 
 // ----------------------
-// Assignment 4 - NEW Routes
+// Management & Add Routes (REQUER AUTORIZAÇÃO)
 // ----------------------
-// Management view
-router.get("/", utilities.handleErrors(invController.buildManagement))
-
-// Add classification view
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
-
-// Add inventory view
-router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory))
-
-// Process add-classification
-router.post(
-  "/add-classification",
-  invValidate.classificationRules(),
-  invValidate.checkClassificationData,
-  utilities.handleErrors(invController.addClassification)
+// Management view (GET /inv/)
+router.get("/", 
+    checkEmployeeOrAdmin, // <--- Protegido
+    utilities.handleErrors(invController.buildManagement)
 )
 
-// Process add-inventory
+// Add classification view
+router.get("/add-classification", 
+    checkEmployeeOrAdmin, // <--- Protegido
+    utilities.handleErrors(invController.buildAddClassification)
+)
+
+// Add inventory view
+router.get("/add-inventory", 
+    checkEmployeeOrAdmin, // <--- Protegido
+    utilities.handleErrors(invController.buildAddInventory)
+)
+
+// Process add-classification (POST)
 router.post(
-  "/add-inventory",
-  invValidate.inventoryRules(),
-  invValidate.checkInventoryData,
-  utilities.handleErrors(invController.addInventory)
+    "/add-classification",
+    checkEmployeeOrAdmin, // <--- Protegido
+    invValidate.classificationRules(),
+    invValidate.checkClassificationData,
+    utilities.handleErrors(invController.addClassification)
+)
+
+// Process add-inventory (POST)
+router.post(
+    "/add-inventory",
+    checkEmployeeOrAdmin, // <--- Protegido
+    invValidate.inventoryRules(),
+    invValidate.checkInventoryData,
+    utilities.handleErrors(invController.addInventory)
+)
+
+// ----------------------
+// AJAX/API Routes (NÃO REQUER AUTORIZAÇÃO)
+// ----------------------
+// Route for getting inventory as JSON for JavaScript (GET /inv/getInventory/id)
+router.get(
+    "/getInventory/:classification_id", 
+    utilities.handleErrors(invController.getInventoryJSON)
+)
+
+// ----------------------
+// Update/Edit Routes (REQUER AUTORIZAÇÃO)
+// ----------------------
+// Route for building the edit inventory view (GET /inv/edit/id)
+router.get(
+    "/edit/:invId", 
+    checkEmployeeOrAdmin, // <--- Protegido
+    utilities.handleErrors(invController.buildEditView)
+)
+
+// Route to handle the submitted updated inventory data
+router.post(
+    "/update", 
+    checkEmployeeOrAdmin, // <--- Protegido
+    invValidate.inventoryRules(), 
+    invValidate.checkUpdateData, 
+    utilities.handleErrors(invController.updateInventory)
 )
 
 module.exports = router

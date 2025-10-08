@@ -23,8 +23,8 @@ invModel.addClassification = async function (classification_name) {
 invModel.addInventory = async function (vehicle) {
   try {
     const sql = `INSERT INTO inventory 
-      (inv_make, inv_model, inv_year, inv_description, inv_price, inv_miles, inv_image, inv_thumbnail, classification_id)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      (inv_make, inv_model, inv_year, inv_description, inv_price, inv_miles, inv_image, inv_thumbnail, classification_id, inv_color)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
       RETURNING *`
     const values = [
       vehicle.inv_make,
@@ -36,6 +36,7 @@ invModel.addInventory = async function (vehicle) {
       vehicle.inv_image,
       vehicle.inv_thumbnail,
       vehicle.classification_id,
+      vehicle.inv_color || 'Unknown' 
     ]
     const result = await pool.query(sql, values)
     return result.rows[0]
@@ -84,6 +85,45 @@ invModel.getInventoryById = async function (inv_id) {
   } catch (error) {
     console.error("Error in getInventoryById:", error)
     return null
+  }
+}
+
+/* ***************************
+ * Update Inventory Data (NOVA FUNÇÃO)
+ * ************************** */
+invModel.updateInventory = async function (
+  inv_id,
+  inv_make,
+  inv_model,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_price,
+  inv_year,
+  inv_miles,
+  inv_color, // Adicionei 'inv_color' para manter a paridade com o modelo anterior
+  classification_id) {
+  try {
+    const sql =
+      "UPDATE inventory SET inv_make = $1, inv_model = $2, inv_description = $3, inv_image = $4, inv_thumbnail = $5, inv_price = $6, inv_year = $7, inv_miles = $8, inv_color = $9, classification_id = $10 WHERE inv_id = $11 RETURNING *"
+    const data = await pool.query(sql, [
+      inv_make,
+      inv_model,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_price,
+      inv_year,
+      inv_miles,
+      inv_color,
+      classification_id,
+      inv_id // O CRUCIAL: $11 no WHERE
+    ])
+    // Retorna a contagem de linhas atualizadas (rowCount) para fácil verificação no Controller
+    return data.rowCount 
+  } catch (error) {
+    console.error("model error: " + error)
+    throw new Error("model error: Failed to update inventory")
   }
 }
 

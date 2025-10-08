@@ -1,0 +1,79 @@
+<% if (title) { %>
+    <h1><%= title %></h1>
+<% } %>
+
+<p>Use os formulários abaixo para atualizar suas informações de conta ou mudar sua senha. Todos os campos são obrigatórios.</p>
+
+<%- errors %> 
+
+<% if (flash && (flash.success.length || flash.error.length || flash.info.length)) { %>
+    <section class="flash-messages" aria-live="polite">
+        <% if (flash.success.length) { %>
+            <% flash.success.forEach(msg => { %>
+                <div class="flash flash-success"><%= msg %></div>
+            <% }) %>
+        <% } %>
+        <% if (flash.error.length) { %>
+            <% flash.error.forEach(msg => { %>
+                <div class="flash flash-error"><%= msg %></div>
+            <% }) %>
+        <% } %>
+        <% if (flash.info.length) { %>
+            <% flash.info.forEach(msg => { %>
+                <div class="flash flash-info"><%= msg %></div>
+            <% }) %>
+        <% } %>
+    </section>
+<% } %>
+
+<hr>
+
+<h2>Account Update</h2>
+<form id="accountUpdateForm" action="/account/update" method="post" class="login-form">
+    
+    <div class="form-group">
+        <label for="account_firstname">First Name:</label>
+        <input type="text" id="account_firstname" name="account_firstname" required 
+            value="<%= locals.account_firstname ? locals.account_firstname : accountData.account_firstname %>">
+    </div>
+
+    <div class="form-group">
+        <label for="account_lastname">Last Name:</label>
+        <input type="text" id="account_lastname" name="account_lastname" required 
+            value="<%= locals.account_lastname ? locals.account_lastname : accountData.account_lastname %>">
+    </div>
+
+    <div class="form-group">
+        <label for="account_email">Email:</label>
+        <input type="email" id="account_email" name="account_email" required 
+            value="<%= locals.account_email ? locals.account_email : accountData.account_email %>">
+    </div>
+    
+    <input type="hidden" name="account_id" 
+           value="<%= accountData.account_id %>">
+    
+    <button type="submit" class="btn">Update Account</button>
+</form>
+
+<hr>
+
+<h2>Change Password</h2>
+<p>
+    Para mudar sua senha, insira uma nova senha abaixo. 
+    **Requisitos de senha:** Mínimo de 12 caracteres e deve conter pelo menos 1 número, 1 letra maiúscula e 1 caractere especial.
+</p>
+<form id="passwordChangeForm" action="/account/change-password" method="post" class="login-form">
+
+    <div class="form-group">
+        <label for="account_password">New Password:</label>
+        <input type="password" id="account_password" name="account_password" required 
+            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9\s]).{12,}" 
+            title="A senha deve ter pelo menos 12 caracteres e conter pelo menos 1 número, 1 maiúscula e 1 caractere especial."
+            aria-describedby="password-requirements">
+    </div>
+    
+    <input type="hidden" name="account_id" 
+           value="<%= accountData.account_id %>">
+    
+    <button type="submit" class="btn">Change Password</button>
+</form>

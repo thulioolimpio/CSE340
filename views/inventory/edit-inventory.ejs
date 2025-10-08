@@ -1,0 +1,96 @@
+<div class="form-container">
+    <% if (title) { %>
+        <h1><%= title %></h1>
+    <% } %>
+
+    <p>Use este formulário para modificar os detalhes do veículo. Todos os campos são obrigatórios.</p>
+
+    <%- errors %> 
+    
+    <% if (flash && (flash.success.length || flash.error.length || flash.info.length)) { %>
+        <section class="flash-messages" aria-live="polite">
+            <% if (flash.success.length) { %>
+                <% flash.success.forEach(msg => { %>
+                    <div class="flash flash-success"><%= msg %></div>
+                <% }) %>
+            <% } %>
+            <% if (flash.error.length) { %>
+                <% flash.error.forEach(msg => { %>
+                    <div class="flash flash-error"><%= msg %></div>
+                <% }) %>
+            <% } %>
+            <% if (flash.info.length) { %>
+                <% flash.info.forEach(msg => { %>
+                    <div class="flash flash-info"><%= msg %></div>
+                <% }) %>
+            <% } %>
+        </section>
+    <% } %>
+    <form id="updateForm" action="/inv/update" method="POST" class="login-form">
+        
+        <div class="form-group">
+            <label for="classification_id">Classification:</label>
+            <%- classificationSelect %>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_make">Make:</label>
+            <input type="text" id="inv_make" name="inv_make" required 
+                    value="<%= locals.inv_make ? locals.inv_make : inv.inv_make %>" />
+        </div>
+
+        <div class="form-group">
+            <label for="inv_model">Model:</label>
+            <input type="text" id="inv_model" name="inv_model" required 
+                    value="<%= locals.inv_model ? locals.inv_model : inv.inv_model %>" />
+        </div>
+
+        <div class="form-group">
+            <label for="inv_year">Year:</label>
+            <input type="number" id="inv_year" name="inv_year" required 
+                    value="<%= locals.inv_year ? locals.inv_year : inv.inv_year %>" />
+        </div>
+
+        <div class="form-group">
+            <label for="inv_description">Description:</label>
+            <textarea id="inv_description" name="inv_description" required><%= locals.inv_description ? locals.inv_description : inv.inv_description %></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="inv_price">Price:</label>
+            <input type="number" step="0.01" id="inv_price" name="inv_price" required 
+                    value="<%= locals.inv_price ? locals.inv_price : inv.inv_price %>" />
+        </div>
+
+        <div class="form-group">
+            <label for="inv_miles">Miles:</label>
+            <input type="number" step="1" id="inv_miles" name="inv_miles" required 
+                    value="<%= locals.inv_miles ? locals.inv_miles : inv.inv_miles %>" />
+        </div>
+        
+        <div class="form-group">
+            <label for="inv_color">Color:</label>
+            <input type="text" id="inv_color" name="inv_color" required 
+                    value="<%= locals.inv_color ? locals.inv_color : inv.inv_color %>" />
+        </div>
+
+        <div class="form-group">
+            <label for="inv_thumbnail">Thumbnail Image Path:</label>
+            <input type="text" id="inv_thumbnail" name="inv_thumbnail" required 
+                    value="<%= locals.inv_thumbnail ? locals.inv_thumbnail : inv.inv_thumbnail %>" />
+        </div>
+
+        <div class="form-group">
+            <label for="inv_image">Full Image Path:</label>
+            <input type="text" id="inv_image" name="inv_image" required 
+                    value="<%= locals.inv_image ? locals.inv_image : inv.inv_image %>" />
+        </div>
+
+        <button type="submit" class="btn" id="updateButton" disabled>Update Vehicle</button>
+        
+        <input type="hidden" name="inv_id" 
+        value="<%= locals.inv_id ? locals.inv_id : inv.inv_id %>">
+    </form>
+</div>
+
+<script src="/js/inv-update.js"></script>

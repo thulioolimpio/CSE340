@@ -1,0 +1,48 @@
+<main class="account-management">
+    <h1><%= title %></h1>
+
+    <% if (messages && Array.isArray(messages) && messages.length > 0) { %>
+        <div class="flash-messages">
+            <% messages.forEach(message => { %>
+                <p class="notice"><%= Array.isArray(message) ? message.join(' ') : message %></p>
+            <% }) %>
+        </div>
+    <% } %>
+
+    <% if (errors && typeof errors.array === 'function' && errors.array().length > 0) { %>
+        <ul class="notice">
+            <% errors.array().forEach(error => { %>
+                <li><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+
+    <% 
+        // Tentamos usar locals primeiro (mais seguro se for definido pelo middleware)
+        const firstName = locals.account_firstname || (accountData ? accountData.account_firstname : 'User');
+        const accountType = locals.account_type || (accountData ? accountData.account_type : 'Client');
+        const accountId = locals.account_id || (accountData ? accountData.account_id : null);
+    %>
+
+    <h2>Welcome <%= firstName %> (<%= accountType %>)</h2>
+
+    <hr>
+    
+    <% if (accountId) { %>
+        <h3 id="account-update-heading">Account Management</h3>
+        <p>
+            <a href="/account/update/<%= accountId %>" title="Update your account details">Update Account Information</a>
+        </p>
+        <hr>
+    <% } %>
+
+
+    <% if (accountType === "Employee" || accountType === "Admin") { %>
+        
+        <h3>Inventory Management</h3>
+        <p>
+            <a href="/inv/" title="Access the inventory management view">Access Inventory Management View</a>
+        </p>
+    <% } %>
+
+</main>
