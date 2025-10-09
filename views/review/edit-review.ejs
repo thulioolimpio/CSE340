@@ -1,0 +1,28 @@
+<%- contentFor('body') %>
+
+<div class="edit-review-view">
+    <h1><%= title %></h1>
+    
+    <%- include('../partials/flash.ejs') %>
+
+    <% if (errors && errors.array().length > 0) { %>
+        <ul class="notice">
+            <% errors.array().forEach(error => { %>
+                <li><%= error.msg %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+
+    <form action="/review/update" method="post" class="review-form">
+        <fieldset>
+            <legend>Edit Review</legend>
+
+            <label for="review_text">Review:</label>
+            <textarea id="review_text" name="review_text" required maxlength="500"><%= review_text || '' %></textarea>
+
+            <button type="submit">Update Review</button>
+
+            <input type="hidden" name="review_id" value="<%= reviewData.review_id %>">
+        </fieldset>
+    </form>
+</div>

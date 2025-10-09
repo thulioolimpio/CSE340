@@ -43,6 +43,24 @@
         <p>
             <a href="/inv/" title="Access the inventory management view">Access Inventory Management View</a>
         </p>
+        <hr>
     <% } %>
+
+    <!-- NOVO: LISTA DE REVIEWS DO CLIENTE -->
+    <% 
+        // A variável clientReviewsHTML é fornecida pelo accountController
+        // O valor é uma string HTML (vazia se não houver reviews)
+        if (typeof clientReviewsHTML !== 'undefined' && clientReviewsHTML.length > 0) { 
+    %>
+            <%- clientReviewsHTML %>
+    <% 
+        } else if (accountId) {
+    %>
+            <!-- Mensagem se estiver logado, mas não houver reviews (ou o Controller não passou o HTML) -->
+            <h3 class="mt-4">My Vehicle Reviews</h3>
+            <p class="notice">You have not posted any reviews yet.</p>
+    <% 
+        }
+    %>
 
 </main>

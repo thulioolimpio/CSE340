@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 require("dotenv").config()
 const bcrypt = require("bcryptjs")
 const { validationResult } = require("express-validator") // Importado para lidar com erros de validação
+const reviewUtil = require("../utilities/review-utilities") // NOVO: Importa utilities de review
 
 /* ************************
  * Deliver Login view
@@ -138,16 +139,26 @@ async function buildAccountManagement(req, res, next) {
     try {
         const nav = await utilities.getNav() 
         const accountData = res.locals.accountData || null
+        const account_id = res.locals.account_id 
         
-        // Se a conta for carregada, garante que o objeto de dados está completo para a view
-        // O res.locals.accountData vindo do token pode ser insuficiente para a view,
-        // então é comum buscar os dados completos aqui se necessário, mas o uso do JWT é preferido.
-        
+        let clientReviewsHTML = ""
+
+        // NOVO: Lógica assíncrona para buscar as reviews
+        if (account_id) {
+            try {
+                clientReviewsHTML = await reviewUtil.buildAccountReviewsList(account_id);
+            } catch (error) {
+                console.error("Error fetching client reviews:", error);
+                clientReviewsHTML = "<p class='notice'>Could not load your reviews due to an error.</p>";
+            }
+        }
+
         res.render("account/management", {
             title: "Account Management",
             nav,
             errors: null, 
-            accountData: accountData // Passa os dados do token/locals para a view
+            accountData: accountData, // Dados para a view
+            clientReviewsHTML: clientReviewsHTML // NOVO: Passa o HTML das reviews gerado de forma assíncrona
         })
     } catch (error) {
         console.error("buildAccountManagement error:", error)
@@ -262,7 +273,7 @@ module.exports = {
     accountLogin,
     buildAccountManagement,
     buildUpdateAccount, // Novo
-    updateAccountInfo,  // Novo
-    changePassword,     // Novo
-    accountLogout       // Novo
+    updateAccountInfo,  // Novo
+    changePassword,     // Novo
+    accountLogout       // Novo
 }

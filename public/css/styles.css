@@ -1,3 +1,4 @@
+/* Global Reset and Box Model */
 *,
 *:before,
 *:after {
@@ -18,8 +19,15 @@
   --dark-color: #2c3e50;
   --text-color: #333333;
   --background-color: #ffffff;
-  --button-color: #0056b3;
-  --button-hover: #003d82;
+  
+  /* Cores dos Botões aprimoradas */
+  --button-color: #0077cc; 
+  --button-hover: #005fa3; 
+  --button-active: #004c8c;
+  
+  /* Cores de Ação de Risco (Exclusão) */
+  --danger-color: #e74c3c;
+  --danger-hover: #c0392b;
 }
 
 body {
@@ -38,8 +46,8 @@ body {
 
 /* Container principal com borda circular */
 #wrapper {
-  width: 70%;
-  max-width: 900px;
+  width: 90%; 
+  max-width: 1300px; 
   background-color: var(--light-color);
   border: 3px solid var(--secondary-color);
   border-radius: 25px;
@@ -97,7 +105,7 @@ body {
 }
 
 .menu-toggle {
-  display: none; /* Sempre escondido */
+  display: none; 
 }
 
 .nav-menu {
@@ -196,7 +204,7 @@ body {
 }
 
 .cta-button:focus {
-  outline: 3px solid #0056b3;
+  outline: 3px solid var(--button-color);
   outline-offset: 2px;
 }
 
@@ -263,7 +271,7 @@ body {
 .box a {
   display: block;
   padding: 0.4rem 1rem;
-  color: #0056b3;
+  color: var(--button-color);
   text-decoration: none;
   font-weight: 600;
   transition: color 0.3s;
@@ -272,7 +280,7 @@ body {
 }
 
 .box a:hover {
-  color: #003366;
+  color: var(--button-hover);
   background-color: #e0e0e0;
 }
 
@@ -333,12 +341,31 @@ body {
   color: var(--primary-color);
 }
 
+/* ESTILO ATUALIZADO PARA MENSAGENS FLASH */
+.flash-messages,
 .notice {
-  text-align: center;
-  padding: 2rem;
-  font-style: italic;
-  color: #666;
+    padding: 15px;
+    margin: 1rem 0;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    text-align: center;
 }
+
+.notice { /* Default para avisos e erros (VERMELHO) */
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.success { /* Para operações bem-sucedidas (VERDE) */
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+
 #listinha {
   list-style: none;
 }
@@ -372,9 +399,74 @@ footer a{
   color: #ffffff;
 }
 
-/* ====== Login (My Account) ====== */
+/* ==================================
+  Botões Primários (Melhorados)
+================================== */
+.btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  /* Gradiente mais vibrante */
+  background: linear-gradient(135deg, var(--button-color), #00a0ff); 
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  /* Sombra mais pronunciada */
+  box-shadow: 0 4px 10px rgba(0, 119, 204, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn:hover {
+  /* Leve elevação e sombra mais intensa */
+  transform: translateY(-1px); 
+  box-shadow: 0 6px 15px rgba(0, 119, 204, 0.4);
+  background: linear-gradient(135deg, var(--button-hover), #00a0ff);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  background: var(--button-active);
+}
+
+/* ==================================
+  Botão de Ação Crítica (Danger)
+================================== */
+.btn-danger {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    /* Gradiente de perigo */
+    background: linear-gradient(135deg, var(--danger-color), var(--danger-hover));
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-danger:hover {
+    background: var(--danger-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+}
+
+.btn-danger:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+/* ====== Login, Register, Account Management Forms ====== */
 .form-container {
-  max-width: 500px; /* Aumentado para acomodar forms maiores */
+  max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
   background: #fdfdfd;
@@ -390,7 +482,7 @@ footer a{
   color: #2c3e50;
 }
 
-.form-container h2 { /* Estilo adicionado para o novo título de gerenciamento */
+.form-container h2 { 
     margin-top: 1.5rem;
     color: #333;
     border-bottom: 2px solid #ccc;
@@ -420,21 +512,6 @@ footer a{
   border-color: #0077cc;
   box-shadow: 0 0 5px rgba(0,119,204,0.3);
   outline: none;
-}
-
-.btn {
-  width: 100%;
-  padding: 0.8rem;
-  background: #0077cc;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: #005fa3;
 }
 
 .register-link {
@@ -487,43 +564,6 @@ footer a{
   outline: none;
 }
 
-.register-form .btn {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  background: linear-gradient(135deg, #0077cc, #005fa3);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.register-form .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.register-form .btn:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.register-link {
-  text-align: center;
-  margin-top: 1.5rem;
-  font-size: 0.95rem;
-}
-
-.register-link a {
-  color: #0077cc;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.register-link a:hover {
-  text-decoration: underline;
-}
 
 /* ====== Validação de Inputs ====== */
 
@@ -549,25 +589,8 @@ input:required:valid {
 }
 
 /* ==============================
-    Formulários Add Classification / Inventory
+    Formulários Add Classification / Inventory / Update
 ============================== */
-.form-container {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background: #fdfdfd;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  border: 1px solid #ccc;
-}
-
-.form-container h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
-  color: #2c3e50;
-}
-
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -603,28 +626,6 @@ input:required:valid {
   min-height: 100px;
 }
 
-.btn {
-  width: 100%;
-  padding: 1rem;
-  font-size: 1rem;
-  background: linear-gradient(135deg, #0077cc, #005fa3);
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-}
-
-.btn:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
 /* Validação de campos */
 input:required:invalid,
 select:required:invalid,
@@ -656,6 +657,7 @@ textarea:required:valid {
 .form-link a:hover {
   text-decoration: underline;
 }
+
 .login-form select,
 .register-form select {
   width: 100%;
@@ -681,11 +683,11 @@ textarea:required:valid {
 
 /* Estilo para o Dropdown de Classificação */
 #classificationList {
-    display: block; /* Garante que o dropdown ocupe sua própria linha */
-    width: 100%; /* Ocupa a largura total do container */
-    max-width: 450px; /* Limita a largura em telas maiores */
+    display: block; 
+    width: 100%; 
+    max-width: 450px; 
     padding: 10px 15px;
-    margin: 1rem 0 2rem 0; /* Espaço após o dropdown */
+    margin: 1rem 0 2rem 0; 
     border: 1px solid #aaa;
     border-radius: 6px;
     background-color: #f9f9f9;
@@ -730,10 +732,10 @@ textarea:required:valid {
 
 #inventoryDisplay {
     width: 100%;
-    border-collapse: collapse; /* Remove o espaçamento duplo das bordas */
+    border-collapse: collapse; 
     margin-top: 1.5rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: white; /* Fundo branco para as células */
+    background-color: white; 
 }
 
 /* Estilo para o cabeçalho da tabela */
@@ -756,7 +758,7 @@ textarea:required:valid {
 #inventoryDisplay th:nth-child(3),
 #inventoryDisplay td:nth-child(2),
 #inventoryDisplay td:nth-child(3) {
-    width: 90px; /* Largura fixa para os links */
+    width: 90px; 
     text-align: center;
 }
 
@@ -780,7 +782,7 @@ textarea:required:valid {
 
 /* Estilo para os links de Ação (Modify/Delete) */
 #inventoryDisplay a {
-    color: var(--secondary-color); /* Azul para links de modificação */
+    color: var(--secondary-color); 
     text-decoration: none;
     font-weight: 500;
     display: inline-block;
@@ -796,10 +798,154 @@ textarea:required:valid {
 
 /* Estilo específico para o link Delete */
 #inventoryDisplay tr td:nth-child(3) a {
-    color: var(--accent-color); /* Vermelho para ações de exclusão */
+    color: var(--danger-color); 
 }
 #inventoryDisplay tr td:nth-child(3) a:hover {
     background-color: #ffe8e8;
+}
+
+/* ================================== */
+/* Account Management View (Novos Estilos) */
+/* ================================== */
+
+.account-management h2 {
+    color: var(--primary-color);
+    margin: 1rem 0 0.5rem 0;
+    font-size: 2rem;
+}
+
+.account-management h3 {
+    color: var(--dark-color);
+    margin-top: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ddd;
+    font-size: 1.5rem;
+}
+
+.account-management a {
+    color: var(--secondary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.account-management a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* ================================== */
+/* Review Specific Styles (W06) */
+/* ================================== */
+
+/* Review Form on Detail Page */
+#review-form-container {
+    padding: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    margin-top: 2rem;
+}
+
+#review-form-container h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+
+/* Review List Table (Account Management) */
+.reviews-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.reviews-table thead {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.reviews-table th,
+.reviews-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #eee;
+}
+
+.reviews-table tbody tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+
+.reviews-table tbody tr:hover {
+    background-color: #eef;
+}
+
+.reviews-table a {
+    color: var(--primary-color);
+    font-weight: 500;
+    margin: 0 5px;
+}
+
+/* Review List on Detail Page */
+.review-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.5rem;
+}
+
+.review-list li {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.review-meta {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed #eee;
+}
+
+.review-meta strong {
+    color: var(--dark-color);
+    font-weight: 700;
+}
+
+.review-text {
+    font-style: italic;
+    color: var(--text-color);
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Review Edit/Delete Forms (Re-uses .form-container) */
+.review-delete-confirmation {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff3f3;
+    border-radius: 12px;
+    border: 2px solid #e74c3c;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.review-delete-confirmation h1 {
+    color: #e74c3c;
+}
+
+.review-delete-confirmation p {
+    margin: 1rem 0 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
 /* ================================== */
@@ -807,15 +953,18 @@ textarea:required:valid {
 /* ================================== */
 @media screen and (max-width: 767px) {
     /* Ajustes específicos para a tabela em mobile */
-    #inventoryDisplay {
+    #inventoryDisplay,
+    .reviews-table {
         display: block;
-        overflow-x: auto; /* Permite rolagem horizontal */
-        white-space: nowrap; /* Impede que o conteúdo da célula quebre */
+        overflow-x: auto; 
+        white-space: nowrap; 
         box-shadow: none;
     }
 
     #inventoryDisplay th, 
-    #inventoryDisplay td {
+    #inventoryDisplay td,
+    .reviews-table th,
+    .reviews-table td {
         padding: 8px 10px;
         font-size: 0.85em;
         white-space: nowrap;
@@ -830,7 +979,9 @@ textarea:required:valid {
     #inventoryDisplay th:nth-child(2),
     #inventoryDisplay th:nth-child(3),
     #inventoryDisplay td:nth-child(2),
-    #inventoryDisplay td:nth-child(3) {
+    #inventoryDisplay td:nth-child(3),
+    .reviews-table th,
+    .reviews-table td {
         width: auto; 
     }
 }
@@ -963,6 +1114,10 @@ textarea:required:valid {
         font-size: 0.9rem;
     }
     
+    .hero-content {
+        padding: 15px;
+    }
+    
     .cta-button {
         width: 180px;
         height: 50px;
@@ -1003,12 +1158,5 @@ textarea:required:valid {
     
     .box img {
         height: 90px;
-    }
-}
-
-/* Telas grandes (acima de 1200px) - Mantém estilo original */
-@media screen and (min-width: 1200px) {
-    #wrapper {
-        max-width: 1100px;
     }
 }

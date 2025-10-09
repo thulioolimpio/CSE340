@@ -9,37 +9,27 @@ const express = require("express")
 const session = require("express-session")
 const pool = require('./database/')
 const accountRoute = require("./routes/accountRoute")
-const inventoryRoute = require("./routes/inventoryRoute")
+const inventoryRoute = require("./routes/inventoryRoute") 
+const reviewRoute = require("./routes/reviewRoute") // Rota de Reviews
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const utilities = require("./utilities/")
 const expressLayouts = require("express-ejs-layouts")
 const path = require('path')
-const bodyParser = require("body-parser")
+// CORRIGIDO: O nome correto do módulo é "body-parser"
+const bodyParser = require("body-parser") 
 const cookieParser = require("cookie-parser")
 const flash = require('connect-flash')
 
 // Carregar dotenv
 require('dotenv').config({ path: path.join(__dirname, '.env') })
 
-// DEBUG: Verificar arquivo .env
+// DEBUG: Verificar arquivo .env (Removido o console.log extenso para limpeza)
 const fs = require('fs')
 const envPath = path.join(__dirname, '.env')
-console.log('=== Verificando arquivo .env ===')
-console.log('Caminho do .env:', envPath)
-console.log('.env existe?', fs.existsSync(envPath))
-if (fs.existsSync(envPath)) {
-  console.log('Conteúdo do .env:')
-  console.log(fs.readFileSync(envPath, 'utf8'))
-}
-console.log('================================')
+console.log('=== Database Connection ===')
+console.log('NODE_ENV:', process.env.NODE_ENV)
 
-// DEBUG: Variáveis de ambiente
-console.log("=== Variáveis de Ambiente ===")
-console.log("NODE_ENV:", process.env.NODE_ENV)
-console.log("PORT:", process.env.PORT)
-console.log("DATABASE_URL:", process.env.DATABASE_URL || "NÃO ENCONTRADA")
-console.log("==============================")
 
 const app = express()
 
@@ -55,37 +45,39 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // Session com PostgreSQL
 app.use(session({
-  store: new (require('connect-pg-simple')(session))({
-    createTableIfMissing: true,
-    pool,
-  }),
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: true,
-  name: 'sessionId',
-  cookie: { maxAge: 1000 * 60 * 60 } // 1 hora
+    store: new (require('connect-pg-simple')(session))({
+        createTableIfMissing: true,
+        pool,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    name: 'sessionId',
+    cookie: { maxAge: 1000 * 60 * 60 } // 1 hora
 }))
 
 // Flash Messages
 app.use(flash())
 app.use((req, res, next) => {
-  res.locals.flash = {
-    success: req.flash('success'),
-    error: req.flash('error'),
-    info: req.flash('info')
-  }
-  next()
+    // Middleware para tornar o helper 'messages' disponível
+    res.locals.messages = require('express-messages')(req, res)
+    // Variáveis locals para o status de login
+    res.locals.loggedin = req.session.loggedin
+    res.locals.account_id = req.session.account_id
+    res.locals.account_firstname = req.session.account_firstname
+    res.locals.account_type = req.session.account_type
+    
+    // Variáveis para flash (alternativa ao express-messages, se necessário)
+    res.locals.flash = {
+        success: req.flash('success'),
+        error: req.flash('error'),
+        info: req.flash('info')
+    }
+    next()
 })
 
 // JWT Middleware seguro
 app.use(utilities.checkJWTToken)
-
-// Express Messages (opcional)
-app.use(require('connect-flash')())
-app.use(function(req, res, next){
-  res.locals.messages = require('express-messages')(req, res)
-  next()
-})
 
 /* ***********************
  * View Engine and Layouts
@@ -112,30 +104,33 @@ app.use("/account", accountRoute)
 // Inventory Routes
 app.use("/inv", inventoryRoute)
 
+// Review Routes
+app.use("/review", reviewRoute) 
+
 /* ***********************
  * 404 Not Found
  *************************/
 app.use(async (req, res, next) => {
-  next({status: 404, message: 'Sorry, we appear to have lost that page.'})
+    next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
 
 /* ***********************
  * Error Handler
  *************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav()
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
-  let message
-  if (err.status == 404) {
-    message = err.message
-  } else {
-    message = 'Oh no! There was a crash. Maybe try a different route?'
-  }
-  res.render("errors/error", {
-    title: err.status || 'Server Error',
-    message,
-    nav
-  })
+    let nav = await utilities.getNav()
+    console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+    let message
+    if (err.status == 404) {
+        message = err.message
+    } else {
+        message = 'Oh no! There was a crash. Maybe try a different route?'
+    }
+    res.render("errors/error", {
+        title: err.status || 'Server Error',
+        message,
+        nav
+    })
 })
 
 /* ***********************
@@ -145,5 +140,5 @@ const port = process.env.PORT || 5500
 const host = process.env.HOST || "localhost"
 
 app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
+    console.log(`app listening on ${host}:${port}`)
 })
